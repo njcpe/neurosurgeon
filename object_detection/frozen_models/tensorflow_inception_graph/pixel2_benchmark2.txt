@@ -1,0 +1,728 @@
+WARNING: linker: "/data/local/tmp/benchmark_model" unused DT entry: type 0xf arg 0x88a
+native : benchmark_model.cc:469 Graph: [/data/local/tmp/tensorflow_inception_graph.pb]
+native : benchmark_model.cc:470 Init ops:
+native : benchmark_model.cc:471 Input layers: [input:0]
+native : benchmark_model.cc:472 Input shapes: [1,224,224,3]
+native : benchmark_model.cc:473 Input types: [float]
+native : benchmark_model.cc:474 Output layers: [output2]
+native : benchmark_model.cc:475 Target layers: []
+native : benchmark_model.cc:476 Num runs: [1000]
+native : benchmark_model.cc:477 Inter-inference delay (seconds): [-1.0]
+native : benchmark_model.cc:478 Inter-benchmark delay (seconds): [-1.0]
+native : benchmark_model.cc:480 Num threads: [-1]
+native : benchmark_model.cc:481 Benchmark name: []
+native : benchmark_model.cc:482 Output prefix: []
+native : benchmark_model.cc:483 Show sizes: [1]
+native : benchmark_model.cc:484 Warmup runs: [1]
+native : benchmark_model.cc:251 Loading TensorFlow.
+native : benchmark_model.cc:258 Got config, 0 devices
+can't determine number of CPU cores: assuming 4
+can't determine number of CPU cores: assuming 4
+native : benchmark_model.cc:496 Initialized session in 0.121888s
+native : benchmark_model.cc:327 Running benchmark for max 1 iterations, max -1 seconds without detailed stat logging, with -1s sleep between inferences
+native : benchmark_model.cc:361 count=1 curr=268748
+
+native : benchmark_model.cc:327 Running benchmark for max 1000 iterations, max 10 seconds without detailed stat logging, with -1s sleep between inferences
+native : benchmark_model.cc:361 count=19 first=183903 curr=775016 min=181344 max=818458 avg=539071 std=215288
+
+native : benchmark_model.cc:327 Running benchmark for max 1000 iterations, max 10 seconds with detailed stat logging, with -1s sleep between inferences
+native : benchmark_model.cc:361 count=21 first=375665 curr=711772 min=185117 max=925057 avg=506348 std=252717
+
+native : benchmark_model.cc:600 Average inference timings in us: Warmup: 268748, no stats: 539071, with stats: 506347
+native : stat_summarizer.cc:85 ============================== Run Order ==============================
+native : stat_summarizer.cc:85 	             [node type]	  [start]	  [first]	 [avg ms]	     [%]	  [cdf%]	  [mem KB]	[times called]	[Name]
+native : stat_summarizer.cc:85 	                    NoOp	    0.000	    0.048	    0.048	  0.000%	  0.000%	     0.000	        0	_SOURCE
+native : stat_summarizer.cc:85 	                   Const	    0.091	    0.035	    0.035	  0.000%	  0.001%	     0.000	        0	conv2d0_w
+native : stat_summarizer.cc:85 	                   Const	    0.131	    0.012	    0.012	  0.000%	  0.001%	     0.000	        0	conv2d0_b
+native : stat_summarizer.cc:85 	                   Const	    0.147	    0.011	    0.011	  0.000%	  0.001%	     0.000	        0	conv2d1_w
+native : stat_summarizer.cc:85 	                   Const	    0.161	    0.009	    0.009	  0.000%	  0.001%	     0.000	        0	conv2d1_b
+native : stat_summarizer.cc:85 	                   Const	    0.174	    0.011	    0.011	  0.000%	  0.001%	     0.000	        0	conv2d2_w
+native : stat_summarizer.cc:85 	                   Const	    0.187	    0.009	    0.009	  0.000%	  0.001%	     0.000	        0	conv2d2_b
+native : stat_summarizer.cc:85 	                   Const	    0.200	    0.010	    0.010	  0.000%	  0.001%	     0.000	        0	mixed3a_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    0.213	    0.009	    0.009	  0.000%	  0.001%	     0.000	        0	mixed3a_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    0.227	    0.011	    0.011	  0.000%	  0.002%	     0.000	        0	mixed3a_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.242	    0.014	    0.014	  0.000%	  0.002%	     0.000	        0	mixed3a_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.259	    0.014	    0.014	  0.000%	  0.002%	     0.000	        0	mixed3a_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    0.276	    0.008	    0.008	  0.000%	  0.002%	     0.000	        0	mixed3a_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    0.288	    0.011	    0.011	  0.000%	  0.002%	     0.000	        0	mixed3a_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.303	    0.019	    0.019	  0.000%	  0.002%	     0.000	        0	mixed3a_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.330	    0.011	    0.011	  0.000%	  0.002%	     0.000	        0	mixed3a_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    0.344	    0.009	    0.009	  0.000%	  0.002%	     0.000	        0	mixed3a_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    0.358	    0.017	    0.017	  0.000%	  0.003%	     0.000	        0	mixed3a_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    0.382	    0.012	    0.012	  0.000%	  0.003%	     0.000	        0	mixed3a_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    0.397	    0.012	    0.012	  0.000%	  0.003%	     0.000	        0	mixed3b_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    0.412	    0.009	    0.009	  0.000%	  0.003%	     0.000	        0	mixed3b_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    0.424	    0.016	    0.016	  0.000%	  0.003%	     0.000	        0	mixed3b_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.444	    0.009	    0.009	  0.000%	  0.003%	     0.000	        0	mixed3b_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.457	    0.013	    0.013	  0.000%	  0.003%	     0.000	        0	mixed3b_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    0.473	    0.010	    0.010	  0.000%	  0.003%	     0.000	        0	mixed3b_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    0.487	    0.011	    0.011	  0.000%	  0.003%	     0.000	        0	mixed3b_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.502	    0.010	    0.010	  0.000%	  0.004%	     0.000	        0	mixed3b_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.515	    0.011	    0.011	  0.000%	  0.004%	     0.000	        0	mixed3b_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    0.529	    0.009	    0.009	  0.000%	  0.004%	     0.000	        0	mixed3b_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    0.553	    0.014	    0.014	  0.000%	  0.004%	     0.000	        0	mixed3b_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    0.570	    0.010	    0.010	  0.000%	  0.004%	     0.000	        0	mixed3b_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    0.583	    0.011	    0.011	  0.000%	  0.004%	     0.000	        0	mixed4a_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    0.598	    0.010	    0.010	  0.000%	  0.004%	     0.000	        0	mixed4a_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    0.612	    0.011	    0.011	  0.000%	  0.004%	     0.000	        0	mixed4a_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.626	    0.009	    0.009	  0.000%	  0.004%	     0.000	        0	mixed4a_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.639	    0.015	    0.015	  0.000%	  0.004%	     0.000	        0	mixed4a_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    0.658	    0.009	    0.009	  0.000%	  0.005%	     0.000	        0	mixed4a_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    0.671	    0.011	    0.011	  0.000%	  0.005%	     0.000	        0	mixed4a_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.686	    0.009	    0.009	  0.000%	  0.005%	     0.000	        0	mixed4a_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.698	    0.019	    0.019	  0.000%	  0.005%	     0.000	        0	mixed4a_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    0.721	    0.009	    0.009	  0.000%	  0.005%	     0.000	        0	mixed4a_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    0.734	    0.010	    0.010	  0.000%	  0.005%	     0.000	        0	mixed4a_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    0.748	    0.009	    0.009	  0.000%	  0.005%	     0.000	        0	mixed4a_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    0.760	    0.012	    0.012	  0.000%	  0.005%	     0.000	        0	mixed4b_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    0.775	    0.009	    0.009	  0.000%	  0.005%	     0.000	        0	mixed4b_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    0.788	    0.010	    0.010	  0.000%	  0.005%	     0.000	        0	mixed4b_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.801	    0.009	    0.009	  0.000%	  0.006%	     0.000	        0	mixed4b_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.817	    0.015	    0.015	  0.000%	  0.006%	     0.000	        0	mixed4b_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    0.836	    0.009	    0.009	  0.000%	  0.006%	     0.000	        0	mixed4b_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    0.849	    0.013	    0.013	  0.000%	  0.006%	     0.000	        0	mixed4b_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.865	    0.013	    0.013	  0.000%	  0.006%	     0.000	        0	mixed4b_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.881	    0.012	    0.012	  0.000%	  0.006%	     0.000	        0	mixed4b_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    0.896	    0.009	    0.009	  0.000%	  0.006%	     0.000	        0	mixed4b_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    0.908	    0.010	    0.010	  0.000%	  0.006%	     0.000	        0	mixed4b_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    0.922	    0.009	    0.009	  0.000%	  0.006%	     0.000	        0	mixed4b_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    0.934	    0.011	    0.011	  0.000%	  0.007%	     0.000	        0	mixed4c_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    0.948	    0.008	    0.008	  0.000%	  0.007%	     0.000	        0	mixed4c_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    0.960	    0.014	    0.014	  0.000%	  0.007%	     0.000	        0	mixed4c_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    0.983	    0.010	    0.010	  0.000%	  0.007%	     0.000	        0	mixed4c_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    0.997	    0.011	    0.011	  0.000%	  0.007%	     0.000	        0	mixed4c_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    1.011	    0.008	    0.008	  0.000%	  0.007%	     0.000	        0	mixed4c_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    1.025	    0.011	    0.011	  0.000%	  0.007%	     0.000	        0	mixed4c_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.040	    0.010	    0.010	  0.000%	  0.007%	     0.000	        0	mixed4c_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.053	    0.010	    0.010	  0.000%	  0.007%	     0.000	        0	mixed4c_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    1.067	    0.008	    0.008	  0.000%	  0.007%	     0.000	        0	mixed4c_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    1.080	    0.010	    0.010	  0.000%	  0.007%	     0.000	        0	mixed4c_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    1.093	    0.013	    0.013	  0.000%	  0.008%	     0.000	        0	mixed4c_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    1.110	    0.013	    0.013	  0.000%	  0.008%	     0.000	        0	mixed4d_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    1.127	    0.014	    0.014	  0.000%	  0.008%	     0.000	        0	mixed4d_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    1.145	    0.012	    0.012	  0.000%	  0.008%	     0.000	        0	mixed4d_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.161	    0.010	    0.010	  0.000%	  0.008%	     0.000	        0	mixed4d_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.175	    0.012	    0.012	  0.000%	  0.008%	     0.000	        0	mixed4d_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    1.190	    0.009	    0.009	  0.000%	  0.008%	     0.000	        0	mixed4d_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    1.203	    0.011	    0.011	  0.000%	  0.008%	     0.000	        0	mixed4d_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.218	    0.010	    0.010	  0.000%	  0.008%	     0.000	        0	mixed4d_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.231	    0.014	    0.014	  0.000%	  0.009%	     0.000	        0	mixed4d_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    1.248	    0.009	    0.009	  0.000%	  0.009%	     0.000	        0	mixed4d_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    1.261	    0.010	    0.010	  0.000%	  0.009%	     0.000	        0	mixed4d_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    1.275	    0.010	    0.010	  0.000%	  0.009%	     0.000	        0	mixed4d_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    1.288	    0.014	    0.014	  0.000%	  0.009%	     0.000	        0	mixed4e_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    1.305	    0.009	    0.009	  0.000%	  0.009%	     0.000	        0	mixed4e_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    1.317	    0.012	    0.012	  0.000%	  0.009%	     0.000	        0	mixed4e_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.335	    0.013	    0.013	  0.000%	  0.009%	     0.000	        0	mixed4e_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.355	    0.011	    0.011	  0.000%	  0.009%	     0.000	        0	mixed4e_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    1.370	    0.010	    0.010	  0.000%	  0.010%	     0.000	        0	mixed4e_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    1.397	    0.015	    0.015	  0.000%	  0.010%	     0.000	        0	mixed4e_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.416	    0.009	    0.009	  0.000%	  0.010%	     0.000	        0	mixed4e_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.429	    0.011	    0.011	  0.000%	  0.010%	     0.000	        0	mixed4e_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    1.443	    0.009	    0.009	  0.000%	  0.010%	     0.000	        0	mixed4e_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    1.456	    0.010	    0.010	  0.000%	  0.010%	     0.000	        0	mixed4e_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    1.470	    0.011	    0.011	  0.000%	  0.010%	     0.000	        0	mixed4e_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    1.485	    0.012	    0.012	  0.000%	  0.010%	     0.000	        0	mixed5a_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    1.500	    0.009	    0.009	  0.000%	  0.010%	     0.000	        0	mixed5a_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    1.512	    0.011	    0.011	  0.000%	  0.010%	     0.000	        0	mixed5a_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.527	    0.009	    0.009	  0.000%	  0.011%	     0.000	        0	mixed5a_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.539	    0.012	    0.012	  0.000%	  0.011%	     0.000	        0	mixed5a_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    1.554	    0.009	    0.009	  0.000%	  0.011%	     0.000	        0	mixed5a_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    1.567	    0.010	    0.010	  0.000%	  0.011%	     0.000	        0	mixed5a_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.581	    0.010	    0.010	  0.000%	  0.011%	     0.000	        0	mixed5a_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.595	    0.011	    0.011	  0.000%	  0.011%	     0.000	        0	mixed5a_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    1.609	    0.009	    0.009	  0.000%	  0.011%	     0.000	        0	mixed5a_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    1.621	    0.015	    0.015	  0.000%	  0.011%	     0.000	        0	mixed5a_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    1.639	    0.012	    0.012	  0.000%	  0.011%	     0.000	        0	mixed5a_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    1.654	    0.014	    0.014	  0.000%	  0.012%	     0.000	        0	mixed5b_1x1_w
+native : stat_summarizer.cc:85 	                   Const	    1.671	    0.008	    0.008	  0.000%	  0.012%	     0.000	        0	mixed5b_1x1_b
+native : stat_summarizer.cc:85 	                   Const	    1.684	    0.011	    0.011	  0.000%	  0.012%	     0.000	        0	mixed5b_3x3_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.698	    0.009	    0.009	  0.000%	  0.012%	     0.000	        0	mixed5b_3x3_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.711	    0.010	    0.010	  0.000%	  0.012%	     0.000	        0	mixed5b_3x3_w
+native : stat_summarizer.cc:85 	                   Const	    1.724	    0.008	    0.008	  0.000%	  0.012%	     0.000	        0	mixed5b_3x3_b
+native : stat_summarizer.cc:85 	                   Const	    1.738	    0.011	    0.011	  0.000%	  0.012%	     0.000	        0	mixed5b_5x5_bottleneck_w
+native : stat_summarizer.cc:85 	                   Const	    1.753	    0.009	    0.009	  0.000%	  0.012%	     0.000	        0	mixed5b_5x5_bottleneck_b
+native : stat_summarizer.cc:85 	                   Const	    1.765	    0.011	    0.011	  0.000%	  0.012%	     0.000	        0	mixed5b_5x5_w
+native : stat_summarizer.cc:85 	                   Const	    1.781	    0.012	    0.012	  0.000%	  0.012%	     0.000	        0	mixed5b_5x5_b
+native : stat_summarizer.cc:85 	                   Const	    1.797	    0.014	    0.014	  0.000%	  0.013%	     0.000	        0	mixed5b_pool_reduce_w
+native : stat_summarizer.cc:85 	                   Const	    1.814	    0.012	    0.012	  0.000%	  0.013%	     0.000	        0	mixed5b_pool_reduce_b
+native : stat_summarizer.cc:85 	                   Const	    1.829	    0.010	    0.010	  0.000%	  0.013%	     0.000	        0	softmax2_w
+native : stat_summarizer.cc:85 	                   Const	    1.841	    0.009	    0.009	  0.000%	  0.013%	     0.000	        0	softmax2_b
+native : stat_summarizer.cc:85 	                   Const	    1.853	    0.012	    0.012	  0.000%	  0.013%	     0.000	        0	mixed3a/concat_dim
+native : stat_summarizer.cc:85 	                   Const	    1.868	    0.010	    0.010	  0.000%	  0.013%	     0.000	        0	avgpool0/reshape/shape
+native : stat_summarizer.cc:85 	                    _Arg	    1.881	    0.011	    0.011	  0.000%	  0.013%	     0.000	        0	_arg_input_0_0
+native : stat_summarizer.cc:85 	                  Conv2D	    1.896	   35.007	   35.007	  0.333%	  0.346%	  3211.264	        0	conv2d0_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	   36.969	    3.674	    3.674	  0.035%	  0.381%	     0.000	        0	conv2d0_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	   40.674	    2.261	    2.261	  0.022%	  0.403%	     0.000	        0	conv2d0
+native : stat_summarizer.cc:85 	                 MaxPool	   42.944	   18.949	   18.949	  0.180%	  0.583%	   802.816	        0	maxpool0
+native : stat_summarizer.cc:85 	                     LRN	   61.967	   14.452	   14.452	  0.138%	  0.721%	   802.816	        0	localresponsenorm0
+native : stat_summarizer.cc:85 	                  Conv2D	   76.472	   11.559	   11.559	  0.110%	  0.831%	   802.816	        0	conv2d1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	   88.079	    2.991	    2.991	  0.028%	  0.859%	     0.000	        0	conv2d1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	   91.096	    2.732	    2.732	  0.026%	  0.885%	     0.000	        0	conv2d1
+native : stat_summarizer.cc:85 	                  Conv2D	   93.858	  100.034	  100.034	  0.952%	  1.837%	  2408.448	        0	conv2d2_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  193.976	    2.602	    2.602	  0.025%	  1.862%	     0.000	        0	conv2d2_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  196.621	    2.475	    2.475	  0.024%	  1.885%	     0.000	        0	conv2d2
+native : stat_summarizer.cc:85 	                     LRN	  199.123	   24.005	   24.005	  0.228%	  2.114%	  2408.448	        0	localresponsenorm1
+native : stat_summarizer.cc:85 	                 MaxPool	  223.171	    2.824	    2.824	  0.027%	  2.141%	   602.112	        0	maxpool1
+native : stat_summarizer.cc:85 	                  Conv2D	  226.035	    3.260	    3.260	  0.031%	  2.172%	   200.704	        0	mixed3a_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  229.317	    0.189	    0.189	  0.002%	  2.173%	     0.000	        0	mixed3a_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  229.516	    0.066	    0.066	  0.001%	  2.174%	     0.000	        0	mixed3a_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  229.590	    3.491	    3.491	  0.033%	  2.207%	   301.056	        0	mixed3a_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  233.112	    0.239	    0.239	  0.002%	  2.210%	     0.000	        0	mixed3a_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  233.358	    0.072	    0.072	  0.001%	  2.210%	     0.000	        0	mixed3a_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  233.439	   12.646	   12.646	  0.120%	  2.331%	   401.408	        0	mixed3a_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  246.120	    0.575	    0.575	  0.005%	  2.336%	     0.000	        0	mixed3a_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  246.713	    0.600	    0.600	  0.006%	  2.342%	     0.000	        0	mixed3a_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  247.331	    1.764	    1.764	  0.017%	  2.359%	    50.176	        0	mixed3a_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  249.109	    0.071	    0.071	  0.001%	  2.359%	     0.000	        0	mixed3a_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  249.188	    0.023	    0.023	  0.000%	  2.360%	     0.000	        0	mixed3a_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  249.216	    3.230	    3.230	  0.031%	  2.390%	   100.352	        0	mixed3a_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  252.457	    0.117	    0.117	  0.001%	  2.391%	     0.000	        0	mixed3a_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  252.582	    0.039	    0.039	  0.000%	  2.392%	     0.000	        0	mixed3a_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  252.629	    2.515	    2.515	  0.024%	  2.416%	   602.112	        0	mixed3a_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  255.180	    2.245	    2.245	  0.021%	  2.437%	   100.352	        0	mixed3a_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  257.436	    0.082	    0.082	  0.001%	  2.438%	     0.000	        0	mixed3a_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  257.522	    0.021	    0.021	  0.000%	  2.438%	     0.000	        0	mixed3a_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  257.546	    0.593	    0.593	  0.006%	  2.444%	   802.816	        0	mixed3a
+native : stat_summarizer.cc:85 	                  Conv2D	  258.177	    3.394	    3.394	  0.032%	  2.476%	   401.408	        0	mixed3b_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  261.604	    0.488	    0.488	  0.005%	  2.481%	     0.000	        0	mixed3b_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  262.098	    0.148	    0.148	  0.001%	  2.482%	     0.000	        0	mixed3b_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  262.254	    3.527	    3.527	  0.034%	  2.516%	   401.408	        0	mixed3b_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  265.820	    0.163	    0.163	  0.002%	  2.517%	     0.000	        0	mixed3b_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  265.988	    0.049	    0.049	  0.000%	  2.518%	     0.000	        0	mixed3b_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  266.041	   13.425	   13.425	  0.128%	  2.645%	   602.112	        0	mixed3b_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  279.499	    0.383	    0.383	  0.004%	  2.649%	     0.000	        0	mixed3b_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  279.889	    0.094	    0.094	  0.001%	  2.650%	     0.000	        0	mixed3b_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  279.990	    1.058	    1.058	  0.010%	  2.660%	   100.352	        0	mixed3b_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  281.058	    0.059	    0.059	  0.001%	  2.661%	     0.000	        0	mixed3b_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  281.122	    0.019	    0.019	  0.000%	  2.661%	     0.000	        0	mixed3b_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  281.145	    5.198	    5.198	  0.049%	  2.710%	   301.056	        0	mixed3b_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  286.373	    0.171	    0.171	  0.002%	  2.712%	     0.000	        0	mixed3b_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  286.555	    0.049	    0.049	  0.000%	  2.712%	     0.000	        0	mixed3b_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  286.611	    1.818	    1.818	  0.017%	  2.730%	   802.816	        0	mixed3b_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  288.448	    1.940	    1.940	  0.018%	  2.748%	   200.704	        0	mixed3b_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  290.414	    0.110	    0.110	  0.001%	  2.749%	     0.000	        0	mixed3b_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  290.529	    0.047	    0.047	  0.000%	  2.750%	     0.000	        0	mixed3b_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  290.579	    0.894	    0.894	  0.009%	  2.758%	  1505.280	        0	mixed3b
+native : stat_summarizer.cc:85 	                 MaxPool	  291.502	    1.044	    1.044	  0.010%	  2.768%	   376.320	        0	maxpool4
+native : stat_summarizer.cc:85 	                  Conv2D	  292.567	    1.872	    1.872	  0.018%	  2.786%	   150.528	        0	mixed4a_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  294.472	    0.082	    0.082	  0.001%	  2.787%	     0.000	        0	mixed4a_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  294.558	    0.026	    0.026	  0.000%	  2.787%	     0.000	        0	mixed4a_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  294.590	    1.197	    1.197	  0.011%	  2.798%	    75.264	        0	mixed4a_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  295.796	    0.044	    0.044	  0.000%	  2.799%	     0.000	        0	mixed4a_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  295.844	    0.014	    0.014	  0.000%	  2.799%	     0.000	        0	mixed4a_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  295.861	    3.826	    3.826	  0.036%	  2.835%	   159.936	        0	mixed4a_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  299.718	    0.080	    0.080	  0.001%	  2.836%	     0.000	        0	mixed4a_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  299.803	    0.028	    0.028	  0.000%	  2.836%	     0.000	        0	mixed4a_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  299.838	    0.498	    0.498	  0.005%	  2.841%	    12.544	        0	mixed4a_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  300.343	    0.015	    0.015	  0.000%	  2.841%	     0.000	        0	mixed4a_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  300.365	    0.008	    0.008	  0.000%	  2.841%	     0.000	        0	mixed4a_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  300.378	    0.697	    0.697	  0.007%	  2.848%	    37.632	        0	mixed4a_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  301.082	    0.029	    0.029	  0.000%	  2.848%	     0.000	        0	mixed4a_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  301.114	    0.010	    0.010	  0.000%	  2.848%	     0.000	        0	mixed4a_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  301.129	    0.686	    0.686	  0.007%	  2.855%	   376.320	        0	mixed4a_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  301.836	    0.962	    0.962	  0.009%	  2.864%	    50.176	        0	mixed4a_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  302.807	    0.033	    0.033	  0.000%	  2.864%	     0.000	        0	mixed4a_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  302.843	    0.013	    0.013	  0.000%	  2.864%	     0.000	        0	mixed4a_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  302.860	    0.229	    0.229	  0.002%	  2.866%	   398.272	        0	mixed4a
+native : stat_summarizer.cc:85 	                  Conv2D	  303.110	    1.408	    1.408	  0.013%	  2.880%	   125.440	        0	mixed4b_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  304.536	    0.070	    0.070	  0.001%	  2.880%	     0.000	        0	mixed4b_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  304.610	    0.023	    0.023	  0.000%	  2.881%	     0.000	        0	mixed4b_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  304.638	    1.294	    1.294	  0.012%	  2.893%	    87.808	        0	mixed4b_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  305.942	    0.051	    0.051	  0.000%	  2.894%	     0.000	        0	mixed4b_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  306.001	    0.016	    0.016	  0.000%	  2.894%	     0.000	        0	mixed4b_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  306.020	    3.537	    3.537	  0.034%	  2.927%	   175.616	        0	mixed4b_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  309.587	    0.091	    0.091	  0.001%	  2.928%	     0.000	        0	mixed4b_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  309.684	    0.028	    0.028	  0.000%	  2.928%	     0.000	        0	mixed4b_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  309.719	    0.624	    0.624	  0.006%	  2.934%	    18.816	        0	mixed4b_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  310.350	    0.020	    0.020	  0.000%	  2.935%	     0.000	        0	mixed4b_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  310.374	    0.008	    0.008	  0.000%	  2.935%	     0.000	        0	mixed4b_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  310.385	    0.719	    0.719	  0.007%	  2.942%	    50.176	        0	mixed4b_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  311.109	    0.029	    0.029	  0.000%	  2.942%	     0.000	        0	mixed4b_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  311.142	    0.012	    0.012	  0.000%	  2.942%	     0.000	        0	mixed4b_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  311.159	    0.646	    0.646	  0.006%	  2.948%	   398.272	        0	mixed4b_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  311.821	    0.800	    0.800	  0.008%	  2.956%	    50.176	        0	mixed4b_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  312.629	    0.033	    0.033	  0.000%	  2.956%	     0.000	        0	mixed4b_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  312.665	    0.015	    0.015	  0.000%	  2.956%	     0.000	        0	mixed4b_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  312.683	    0.454	    0.454	  0.004%	  2.960%	   401.408	        0	mixed4b
+native : stat_summarizer.cc:85 	                  Conv2D	  313.161	    1.182	    1.182	  0.011%	  2.972%	   100.352	        0	mixed4c_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  314.352	    0.055	    0.055	  0.001%	  2.972%	     0.000	        0	mixed4c_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  314.411	    0.019	    0.019	  0.000%	  2.972%	     0.000	        0	mixed4c_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  314.435	    1.388	    1.388	  0.013%	  2.986%	   100.352	        0	mixed4c_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  315.832	    0.054	    0.054	  0.001%	  2.986%	     0.000	        0	mixed4c_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  315.891	    0.017	    0.017	  0.000%	  2.986%	     0.000	        0	mixed4c_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  315.911	    4.783	    4.783	  0.046%	  3.032%	   200.704	        0	mixed4c_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  320.722	    0.101	    0.101	  0.001%	  3.033%	     0.000	        0	mixed4c_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  320.826	    0.032	    0.032	  0.000%	  3.033%	     0.000	        0	mixed4c_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  320.864	    0.457	    0.457	  0.004%	  3.037%	    18.816	        0	mixed4c_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  321.332	    0.021	    0.021	  0.000%	  3.038%	     0.000	        0	mixed4c_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  321.357	    0.007	    0.007	  0.000%	  3.038%	     0.000	        0	mixed4c_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  321.368	    1.066	    1.066	  0.010%	  3.048%	    50.176	        0	mixed4c_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  322.441	    0.032	    0.032	  0.000%	  3.048%	     0.000	        0	mixed4c_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  322.476	    0.012	    0.012	  0.000%	  3.048%	     0.000	        0	mixed4c_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  322.492	    0.607	    0.607	  0.006%	  3.054%	   401.408	        0	mixed4c_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  323.117	    0.825	    0.825	  0.008%	  3.062%	    50.176	        0	mixed4c_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  323.948	    0.036	    0.036	  0.000%	  3.062%	     0.000	        0	mixed4c_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  323.988	    0.012	    0.012	  0.000%	  3.062%	     0.000	        0	mixed4c_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  324.003	    0.227	    0.227	  0.002%	  3.064%	   401.408	        0	mixed4c
+native : stat_summarizer.cc:85 	                  Conv2D	  324.252	    1.013	    1.013	  0.010%	  3.074%	    87.808	        0	mixed4d_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  325.271	    0.051	    0.051	  0.000%	  3.075%	     0.000	        0	mixed4d_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  325.326	    0.016	    0.016	  0.000%	  3.075%	     0.000	        0	mixed4d_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  325.349	    1.274	    1.274	  0.012%	  3.087%	   112.896	        0	mixed4d_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  326.646	    0.061	    0.061	  0.001%	  3.087%	     0.000	        0	mixed4d_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  326.715	    0.022	    0.022	  0.000%	  3.088%	     0.000	        0	mixed4d_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  326.740	    5.193	    5.193	  0.049%	  3.137%	   225.792	        0	mixed4d_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  331.959	    0.113	    0.113	  0.001%	  3.138%	     0.000	        0	mixed4d_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  332.077	    0.042	    0.042	  0.000%	  3.139%	     0.000	        0	mixed4d_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  332.126	    0.500	    0.500	  0.005%	  3.143%	    25.088	        0	mixed4d_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  332.633	    0.024	    0.024	  0.000%	  3.144%	     0.000	        0	mixed4d_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  332.660	    0.008	    0.008	  0.000%	  3.144%	     0.000	        0	mixed4d_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  332.671	    0.935	    0.935	  0.009%	  3.153%	    50.176	        0	mixed4d_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  333.611	    0.037	    0.037	  0.000%	  3.153%	     0.000	        0	mixed4d_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  333.652	    0.012	    0.012	  0.000%	  3.153%	     0.000	        0	mixed4d_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  333.669	    0.709	    0.709	  0.007%	  3.160%	   401.408	        0	mixed4d_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  334.396	    0.815	    0.815	  0.008%	  3.167%	    50.176	        0	mixed4d_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  335.220	    0.035	    0.035	  0.000%	  3.168%	     0.000	        0	mixed4d_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  335.258	    0.012	    0.012	  0.000%	  3.168%	     0.000	        0	mixed4d_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  335.274	    0.527	    0.527	  0.005%	  3.173%	   413.952	        0	mixed4d
+native : stat_summarizer.cc:85 	                  Conv2D	  335.827	    2.838	    2.838	  0.027%	  3.200%	   200.704	        0	mixed4e_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  338.689	    0.096	    0.096	  0.001%	  3.201%	     0.000	        0	mixed4e_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  338.789	    0.030	    0.030	  0.000%	  3.201%	     0.000	        0	mixed4e_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  338.828	    1.579	    1.579	  0.015%	  3.216%	   125.440	        0	mixed4e_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  340.433	    0.067	    0.067	  0.001%	  3.217%	     0.000	        0	mixed4e_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  340.510	    0.021	    0.021	  0.000%	  3.217%	     0.000	        0	mixed4e_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  340.534	    6.470	    6.470	  0.062%	  3.279%	   250.880	        0	mixed4e_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  347.031	    0.123	    0.123	  0.001%	  3.280%	     0.000	        0	mixed4e_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  347.166	    0.039	    0.039	  0.000%	  3.280%	     0.000	        0	mixed4e_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  347.212	    0.627	    0.627	  0.006%	  3.286%	    25.088	        0	mixed4e_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  347.847	    0.021	    0.021	  0.000%	  3.286%	     0.000	        0	mixed4e_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  347.873	    0.008	    0.008	  0.000%	  3.286%	     0.000	        0	mixed4e_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  347.884	    1.889	    1.889	  0.018%	  3.304%	   100.352	        0	mixed4e_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  349.781	    0.058	    0.058	  0.001%	  3.305%	     0.000	        0	mixed4e_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  349.842	    0.020	    0.020	  0.000%	  3.305%	     0.000	        0	mixed4e_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  349.870	    0.781	    0.781	  0.007%	  3.313%	   413.952	        0	mixed4e_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  350.672	    1.325	    1.325	  0.013%	  3.325%	   100.352	        0	mixed4e_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  352.008	    0.060	    0.060	  0.001%	  3.326%	     0.000	        0	mixed4e_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  352.071	    0.018	    0.018	  0.000%	  3.326%	     0.000	        0	mixed4e_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  352.092	    0.445	    0.445	  0.004%	  3.330%	   652.288	        0	mixed4e
+native : stat_summarizer.cc:85 	                 MaxPool	  352.564	    0.366	    0.366	  0.003%	  3.334%	   163.072	        0	maxpool10
+native : stat_summarizer.cc:85 	                  Conv2D	  352.939	    1.072	    1.072	  0.010%	  3.344%	    50.176	        0	mixed5a_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  354.020	    0.037	    0.037	  0.000%	  3.344%	     0.000	        0	mixed5a_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  354.062	    0.013	    0.013	  0.000%	  3.344%	     0.000	        0	mixed5a_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  354.080	    1.003	    1.003	  0.010%	  3.354%	    31.360	        0	mixed5a_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  355.094	    0.024	    0.024	  0.000%	  3.354%	     0.000	        0	mixed5a_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  355.121	    0.009	    0.009	  0.000%	  3.354%	     0.000	        0	mixed5a_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  355.133	    2.201	    2.201	  0.021%	  3.375%	    62.720	        0	mixed5a_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  357.349	    0.048	    0.048	  0.000%	  3.376%	     0.000	        0	mixed5a_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  357.402	    0.020	    0.020	  0.000%	  3.376%	     0.000	        0	mixed5a_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  357.430	    0.550	    0.550	  0.005%	  3.381%	     9.408	        0	mixed5a_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  357.992	    0.013	    0.013	  0.000%	  3.381%	     0.000	        0	mixed5a_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  358.009	    0.006	    0.006	  0.000%	  3.381%	     0.000	        0	mixed5a_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  358.018	    1.557	    1.557	  0.015%	  3.396%	    25.088	        0	mixed5a_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  359.589	    0.025	    0.025	  0.000%	  3.396%	     0.000	        0	mixed5a_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  359.619	    0.009	    0.009	  0.000%	  3.396%	     0.000	        0	mixed5a_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  359.634	    0.356	    0.356	  0.003%	  3.400%	   163.072	        0	mixed5a_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  360.016	    0.878	    0.878	  0.008%	  3.408%	    25.088	        0	mixed5a_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  360.902	    0.027	    0.027	  0.000%	  3.408%	     0.000	        0	mixed5a_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  360.933	    0.009	    0.009	  0.000%	  3.408%	     0.000	        0	mixed5a_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  360.946	    0.118	    0.118	  0.001%	  3.410%	   163.072	        0	mixed5a
+native : stat_summarizer.cc:85 	                  Conv2D	  361.082	    1.536	    1.536	  0.015%	  3.424%	    75.264	        0	mixed5b_1x1_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  362.630	    0.053	    0.053	  0.001%	  3.425%	     0.000	        0	mixed5b_1x1_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  362.688	    0.026	    0.026	  0.000%	  3.425%	     0.000	        0	mixed5b_1x1
+native : stat_summarizer.cc:85 	                  Conv2D	  362.720	    0.917	    0.917	  0.009%	  3.434%	    37.632	        0	mixed5b_3x3_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  363.649	    0.034	    0.034	  0.000%	  3.434%	     0.000	        0	mixed5b_3x3_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  363.688	    0.011	    0.011	  0.000%	  3.434%	     0.000	        0	mixed5b_3x3_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  363.703	    4.188	    4.188	  0.040%	  3.474%	    75.264	        0	mixed5b_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  367.907	    0.065	    0.065	  0.001%	  3.474%	     0.000	        0	mixed5b_3x3_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  367.977	    0.020	    0.020	  0.000%	  3.475%	     0.000	        0	mixed5b_3x3
+native : stat_summarizer.cc:85 	                  Conv2D	  368.004	    0.614	    0.614	  0.006%	  3.481%	     9.408	        0	mixed5b_5x5_bottleneck_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  368.626	    0.012	    0.012	  0.000%	  3.481%	     0.000	        0	mixed5b_5x5_bottleneck_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  368.643	    0.006	    0.006	  0.000%	  3.481%	     0.000	        0	mixed5b_5x5_bottleneck
+native : stat_summarizer.cc:85 	                  Conv2D	  368.652	    1.310	    1.310	  0.012%	  3.493%	    25.088	        0	mixed5b_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  369.971	    0.026	    0.026	  0.000%	  3.493%	     0.000	        0	mixed5b_5x5_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  370.001	    0.011	    0.011	  0.000%	  3.494%	     0.000	        0	mixed5b_5x5
+native : stat_summarizer.cc:85 	                 MaxPool	  370.017	    0.308	    0.308	  0.003%	  3.496%	   163.072	        0	mixed5b_pool
+native : stat_summarizer.cc:85 	                  Conv2D	  370.347	    0.926	    0.926	  0.009%	  3.505%	    25.088	        0	mixed5b_pool_reduce_pre_relu/conv
+native : stat_summarizer.cc:85 	                 BiasAdd	  371.280	    0.024	    0.024	  0.000%	  3.505%	     0.000	        0	mixed5b_pool_reduce_pre_relu
+native : stat_summarizer.cc:85 	                    Relu	  371.313	    0.010	    0.010	  0.000%	  3.506%	     0.000	        0	mixed5b_pool_reduce
+native : stat_summarizer.cc:85 	                  Concat	  371.331	    0.178	    0.178	  0.002%	  3.507%	   200.704	        0	mixed5b
+native : stat_summarizer.cc:85 	                 AvgPool	  371.524	    0.076	    0.076	  0.001%	  3.508%	     4.096	        0	avgpool0
+native : stat_summarizer.cc:85 	                 Reshape	  371.602	    0.009	    0.009	  0.000%	  3.508%	     0.000	        0	avgpool0/reshape
+native : stat_summarizer.cc:85 	                  MatMul	  371.615	    3.520	    3.520	  0.033%	  3.542%	     4.032	        0	softmax2_pre_activation/matmul
+native : stat_summarizer.cc:85 	                 BiasAdd	  375.147	    0.019	    0.019	  0.000%	  3.542%	     0.000	        0	softmax2_pre_activation
+native : stat_summarizer.cc:85 	                 Softmax	  375.170	    0.042	    0.042	  0.000%	  3.542%	     0.000	        0	softmax2
+native : stat_summarizer.cc:85 	                Identity	  375.214	    0.006	    0.006	  0.000%	  3.542%	     0.000	        0	output2
+native : stat_summarizer.cc:85 	                 _Retval	  375.223	    0.013	    0.013	  0.000%	  3.542%	     0.000	        0	_retval_output2_0_0
+native : stat_summarizer.cc:85 
+native : stat_summarizer.cc:85 ============================== Top by Computation Time ==============================
+native : stat_summarizer.cc:85 	             [node type]	  [start]	  [first]	 [avg ms]	     [%]	  [cdf%]	  [mem KB]	[times called]	[Name]
+native : stat_summarizer.cc:85 	                  Conv2D	   93.858	  100.034	  100.034	  0.952%	  0.952%	  2408.448	        0	conv2d2_pre_relu/conv
+native : stat_summarizer.cc:85 	                  Conv2D	    1.896	   35.007	   35.007	  0.333%	  1.285%	  3211.264	        0	conv2d0_pre_relu/conv
+native : stat_summarizer.cc:85 	                     LRN	  199.123	   24.005	   24.005	  0.228%	  1.514%	  2408.448	        0	localresponsenorm1
+native : stat_summarizer.cc:85 	                 MaxPool	   42.944	   18.949	   18.949	  0.180%	  1.694%	   802.816	        0	maxpool0
+native : stat_summarizer.cc:85 	                     LRN	   61.967	   14.452	   14.452	  0.138%	  1.831%	   802.816	        0	localresponsenorm0
+native : stat_summarizer.cc:85 	                  Conv2D	  266.041	   13.425	   13.425	  0.128%	  1.959%	   602.112	        0	mixed3b_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                  Conv2D	  233.439	   12.646	   12.646	  0.120%	  2.080%	   401.408	        0	mixed3a_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                  Conv2D	   76.472	   11.559	   11.559	  0.110%	  2.190%	   802.816	        0	conv2d1_pre_relu/conv
+native : stat_summarizer.cc:85 	                  Conv2D	  340.534	    6.470	    6.470	  0.062%	  2.251%	   250.880	        0	mixed4e_3x3_pre_relu/conv
+native : stat_summarizer.cc:85 	                  Conv2D	  281.145	    5.198	    5.198	  0.049%	  2.301%	   301.056	        0	mixed3b_5x5_pre_relu/conv
+native : stat_summarizer.cc:85 
+native : stat_summarizer.cc:85 ============================== Top by Memory Use ==============================
+native : stat_summarizer.cc:85 	             [node type]	  [start]	  [first]	 [avg ms]	     [%]	  [cdf%]	  [mem KB]	[times called]	[Name]
+native : stat_summarizer.cc:85 	                  Conv2D	    1.896	   35.007	   35.007	  0.333%	  0.333%	  3211.264	        0	conv2d0_pre_relu/conv
+native : stat_summarizer.cc:85 	                     LRN	  199.123	   24.005	   24.005	  0.228%	  0.562%	  2408.448	        0	localresponsenorm1
+native : stat_summarizer.cc:85 	                  Conv2D	   93.858	  100.034	  100.034	  0.952%	  1.514%	  2408.448	        0	conv2d2_pre_relu/conv
+native : stat_summarizer.cc:85 	                  Concat	  290.579	    0.894	    0.894	  0.009%	  1.522%	  1505.280	        0	mixed3b
+native : stat_summarizer.cc:85 	                 MaxPool	  286.611	    1.818	    1.818	  0.017%	  1.539%	   802.816	        0	mixed3b_pool
+native : stat_summarizer.cc:85 	                  Concat	  257.546	    0.593	    0.593	  0.006%	  1.545%	   802.816	        0	mixed3a
+native : stat_summarizer.cc:85 	                  Conv2D	   76.472	   11.559	   11.559	  0.110%	  1.655%	   802.816	        0	conv2d1_pre_relu/conv
+native : stat_summarizer.cc:85 	                     LRN	   61.967	   14.452	   14.452	  0.138%	  1.793%	   802.816	        0	localresponsenorm0
+native : stat_summarizer.cc:85 	                 MaxPool	   42.944	   18.949	   18.949	  0.180%	  1.973%	   802.816	        0	maxpool0
+native : stat_summarizer.cc:85 	                  Concat	  352.092	    0.445	    0.445	  0.004%	  1.977%	   652.288	        0	mixed4e
+native : stat_summarizer.cc:85 
+native : stat_summarizer.cc:85 Number of nodes executed: 322
+native : stat_summarizer.cc:85 ============================== Summary by node type ==============================
+native : stat_summarizer.cc:85 	             [Node type]	  [count]	  [avg ms]	    [avg %]	    [cdf %]	  [mem KB]	[times called]
+native : stat_summarizer.cc:85 	                  Conv2D	       57	    12.839	    73.086%	    73.086%	 12904.640	        0
+native : stat_summarizer.cc:85 	                     LRN	        2	     1.831	    10.423%	    83.509%	  3211.264	        0
+native : stat_summarizer.cc:85 	                 MaxPool	       13	     1.497	     8.522%	    92.031%	  5666.752	        0
+native : stat_summarizer.cc:85 	                 BiasAdd	       58	     0.635	     3.615%	    95.645%	     0.000	        0
+native : stat_summarizer.cc:85 	                    Relu	       57	     0.420	     2.391%	    98.036%	     0.000	        0
+native : stat_summarizer.cc:85 	                  Concat	        9	     0.170	     0.968%	    99.004%	  4939.200	        0
+native : stat_summarizer.cc:85 	                  MatMul	        1	     0.167	     0.951%	    99.954%	     4.032	        0
+native : stat_summarizer.cc:85 	                 AvgPool	        1	     0.003	     0.017%	    99.972%	     4.096	        0
+native : stat_summarizer.cc:85 	                 Softmax	        1	     0.002	     0.011%	    99.983%	     0.000	        0
+native : stat_summarizer.cc:85 	                    NoOp	        1	     0.002	     0.011%	    99.994%	     0.000	        0
+native : stat_summarizer.cc:85 	                   Const	      118	     0.001	     0.006%	   100.000%	     0.000	        0
+native : stat_summarizer.cc:85 	                 _Retval	        1	     0.000	     0.000%	   100.000%	     0.000	        0
+native : stat_summarizer.cc:85 	                    _Arg	        1	     0.000	     0.000%	   100.000%	     0.000	        0
+native : stat_summarizer.cc:85 	                 Reshape	        1	     0.000	     0.000%	   100.000%	     0.000	        0
+native : stat_summarizer.cc:85 	                Identity	        1	     0.000	     0.000%	   100.000%	     0.000	        0
+native : stat_summarizer.cc:85 
+native : stat_summarizer.cc:85 Timings (microseconds): count=21 first=372234 curr=703673 min=182159 max=915594 avg=500386 std=250273
+native : stat_summarizer.cc:85 Memory (bytes): count=21 curr=26729984(all same)
+native : stat_summarizer.cc:85 322 nodes observed
+native : stat_summarizer.cc:85 
+native : stat_summarizer.cc:236 ============ Node output tensor sizes in run order ========
+native : stat_summarizer.cc:250 _SOURCE	0
+native : stat_summarizer.cc:250 conv2d0_w	1	float	4	7	7	3	64
+native : stat_summarizer.cc:250 conv2d0_b	1	float	1	64
+native : stat_summarizer.cc:250 conv2d1_w	1	float	4	1	1	64	64
+native : stat_summarizer.cc:250 conv2d1_b	1	float	1	64
+native : stat_summarizer.cc:250 conv2d2_w	1	float	4	3	3	64	192
+native : stat_summarizer.cc:250 conv2d2_b	1	float	1	192
+native : stat_summarizer.cc:250 mixed3a_1x1_w	1	float	4	1	1	192	64
+native : stat_summarizer.cc:250 mixed3a_1x1_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed3a_3x3_bottleneck_w	1	float	4	1	1	192	96
+native : stat_summarizer.cc:250 mixed3a_3x3_bottleneck_b	1	float	1	96
+native : stat_summarizer.cc:250 mixed3a_3x3_w	1	float	4	3	3	96	128
+native : stat_summarizer.cc:250 mixed3a_3x3_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed3a_5x5_bottleneck_w	1	float	4	1	1	192	16
+native : stat_summarizer.cc:250 mixed3a_5x5_bottleneck_b	1	float	1	16
+native : stat_summarizer.cc:250 mixed3a_5x5_w	1	float	4	5	5	16	32
+native : stat_summarizer.cc:250 mixed3a_5x5_b	1	float	1	32
+native : stat_summarizer.cc:250 mixed3a_pool_reduce_w	1	float	4	1	1	192	32
+native : stat_summarizer.cc:250 mixed3a_pool_reduce_b	1	float	1	32
+native : stat_summarizer.cc:250 mixed3b_1x1_w	1	float	4	1	1	256	128
+native : stat_summarizer.cc:250 mixed3b_1x1_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed3b_3x3_bottleneck_w	1	float	4	1	1	256	128
+native : stat_summarizer.cc:250 mixed3b_3x3_bottleneck_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed3b_3x3_w	1	float	4	3	3	128	192
+native : stat_summarizer.cc:250 mixed3b_3x3_b	1	float	1	192
+native : stat_summarizer.cc:250 mixed3b_5x5_bottleneck_w	1	float	4	1	1	256	32
+native : stat_summarizer.cc:250 mixed3b_5x5_bottleneck_b	1	float	1	32
+native : stat_summarizer.cc:250 mixed3b_5x5_w	1	float	4	5	5	32	96
+native : stat_summarizer.cc:250 mixed3b_5x5_b	1	float	1	96
+native : stat_summarizer.cc:250 mixed3b_pool_reduce_w	1	float	4	1	1	256	64
+native : stat_summarizer.cc:250 mixed3b_pool_reduce_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4a_1x1_w	1	float	4	1	1	480	192
+native : stat_summarizer.cc:250 mixed4a_1x1_b	1	float	1	192
+native : stat_summarizer.cc:250 mixed4a_3x3_bottleneck_w	1	float	4	1	1	480	96
+native : stat_summarizer.cc:250 mixed4a_3x3_bottleneck_b	1	float	1	96
+native : stat_summarizer.cc:250 mixed4a_3x3_w	1	float	4	3	3	96	204
+native : stat_summarizer.cc:250 mixed4a_3x3_b	1	float	1	204
+native : stat_summarizer.cc:250 mixed4a_5x5_bottleneck_w	1	float	4	1	1	480	16
+native : stat_summarizer.cc:250 mixed4a_5x5_bottleneck_b	1	float	1	16
+native : stat_summarizer.cc:250 mixed4a_5x5_w	1	float	4	5	5	16	48
+native : stat_summarizer.cc:250 mixed4a_5x5_b	1	float	1	48
+native : stat_summarizer.cc:250 mixed4a_pool_reduce_w	1	float	4	1	1	480	64
+native : stat_summarizer.cc:250 mixed4a_pool_reduce_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4b_1x1_w	1	float	4	1	1	508	160
+native : stat_summarizer.cc:250 mixed4b_1x1_b	1	float	1	160
+native : stat_summarizer.cc:250 mixed4b_3x3_bottleneck_w	1	float	4	1	1	508	112
+native : stat_summarizer.cc:250 mixed4b_3x3_bottleneck_b	1	float	1	112
+native : stat_summarizer.cc:250 mixed4b_3x3_w	1	float	4	3	3	112	224
+native : stat_summarizer.cc:250 mixed4b_3x3_b	1	float	1	224
+native : stat_summarizer.cc:250 mixed4b_5x5_bottleneck_w	1	float	4	1	1	508	24
+native : stat_summarizer.cc:250 mixed4b_5x5_bottleneck_b	1	float	1	24
+native : stat_summarizer.cc:250 mixed4b_5x5_w	1	float	4	5	5	24	64
+native : stat_summarizer.cc:250 mixed4b_5x5_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4b_pool_reduce_w	1	float	4	1	1	508	64
+native : stat_summarizer.cc:250 mixed4b_pool_reduce_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4c_1x1_w	1	float	4	1	1	512	128
+native : stat_summarizer.cc:250 mixed4c_1x1_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed4c_3x3_bottleneck_w	1	float	4	1	1	512	128
+native : stat_summarizer.cc:250 mixed4c_3x3_bottleneck_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed4c_3x3_w	1	float	4	3	3	128	256
+native : stat_summarizer.cc:250 mixed4c_3x3_b	1	float	1	256
+native : stat_summarizer.cc:250 mixed4c_5x5_bottleneck_w	1	float	4	1	1	512	24
+native : stat_summarizer.cc:250 mixed4c_5x5_bottleneck_b	1	float	1	24
+native : stat_summarizer.cc:250 mixed4c_5x5_w	1	float	4	5	5	24	64
+native : stat_summarizer.cc:250 mixed4c_5x5_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4c_pool_reduce_w	1	float	4	1	1	512	64
+native : stat_summarizer.cc:250 mixed4c_pool_reduce_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4d_1x1_w	1	float	4	1	1	512	112
+native : stat_summarizer.cc:250 mixed4d_1x1_b	1	float	1	112
+native : stat_summarizer.cc:250 mixed4d_3x3_bottleneck_w	1	float	4	1	1	512	144
+native : stat_summarizer.cc:250 mixed4d_3x3_bottleneck_b	1	float	1	144
+native : stat_summarizer.cc:250 mixed4d_3x3_w	1	float	4	3	3	144	288
+native : stat_summarizer.cc:250 mixed4d_3x3_b	1	float	1	288
+native : stat_summarizer.cc:250 mixed4d_5x5_bottleneck_w	1	float	4	1	1	512	32
+native : stat_summarizer.cc:250 mixed4d_5x5_bottleneck_b	1	float	1	32
+native : stat_summarizer.cc:250 mixed4d_5x5_w	1	float	4	5	5	32	64
+native : stat_summarizer.cc:250 mixed4d_5x5_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4d_pool_reduce_w	1	float	4	1	1	512	64
+native : stat_summarizer.cc:250 mixed4d_pool_reduce_b	1	float	1	64
+native : stat_summarizer.cc:250 mixed4e_1x1_w	1	float	4	1	1	528	256
+native : stat_summarizer.cc:250 mixed4e_1x1_b	1	float	1	256
+native : stat_summarizer.cc:250 mixed4e_3x3_bottleneck_w	1	float	4	1	1	528	160
+native : stat_summarizer.cc:250 mixed4e_3x3_bottleneck_b	1	float	1	160
+native : stat_summarizer.cc:250 mixed4e_3x3_w	1	float	4	3	3	160	320
+native : stat_summarizer.cc:250 mixed4e_3x3_b	1	float	1	320
+native : stat_summarizer.cc:250 mixed4e_5x5_bottleneck_w	1	float	4	1	1	528	32
+native : stat_summarizer.cc:250 mixed4e_5x5_bottleneck_b	1	float	1	32
+native : stat_summarizer.cc:250 mixed4e_5x5_w	1	float	4	5	5	32	128
+native : stat_summarizer.cc:250 mixed4e_5x5_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed4e_pool_reduce_w	1	float	4	1	1	528	128
+native : stat_summarizer.cc:250 mixed4e_pool_reduce_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed5a_1x1_w	1	float	4	1	1	832	256
+native : stat_summarizer.cc:250 mixed5a_1x1_b	1	float	1	256
+native : stat_summarizer.cc:250 mixed5a_3x3_bottleneck_w	1	float	4	1	1	832	160
+native : stat_summarizer.cc:250 mixed5a_3x3_bottleneck_b	1	float	1	160
+native : stat_summarizer.cc:250 mixed5a_3x3_w	1	float	4	3	3	160	320
+native : stat_summarizer.cc:250 mixed5a_3x3_b	1	float	1	320
+native : stat_summarizer.cc:250 mixed5a_5x5_bottleneck_w	1	float	4	1	1	832	48
+native : stat_summarizer.cc:250 mixed5a_5x5_bottleneck_b	1	float	1	48
+native : stat_summarizer.cc:250 mixed5a_5x5_w	1	float	4	5	5	48	128
+native : stat_summarizer.cc:250 mixed5a_5x5_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed5a_pool_reduce_w	1	float	4	1	1	832	128
+native : stat_summarizer.cc:250 mixed5a_pool_reduce_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed5b_1x1_w	1	float	4	1	1	832	384
+native : stat_summarizer.cc:250 mixed5b_1x1_b	1	float	1	384
+native : stat_summarizer.cc:250 mixed5b_3x3_bottleneck_w	1	float	4	1	1	832	192
+native : stat_summarizer.cc:250 mixed5b_3x3_bottleneck_b	1	float	1	192
+native : stat_summarizer.cc:250 mixed5b_3x3_w	1	float	4	3	3	192	384
+native : stat_summarizer.cc:250 mixed5b_3x3_b	1	float	1	384
+native : stat_summarizer.cc:250 mixed5b_5x5_bottleneck_w	1	float	4	1	1	832	48
+native : stat_summarizer.cc:250 mixed5b_5x5_bottleneck_b	1	float	1	48
+native : stat_summarizer.cc:250 mixed5b_5x5_w	1	float	4	5	5	48	128
+native : stat_summarizer.cc:250 mixed5b_5x5_b	1	float	1	128
+native : stat_summarizer.cc:250 mixed5b_pool_reduce_w	1	float	4	1	1	832	128
+native : stat_summarizer.cc:250 mixed5b_pool_reduce_b	1	float	1	128
+native : stat_summarizer.cc:250 softmax2_w	1	float	2	1024	1008
+native : stat_summarizer.cc:250 softmax2_b	1	float	1	1008
+native : stat_summarizer.cc:250 mixed3a/concat_dim	1	int32	0
+native : stat_summarizer.cc:250 avgpool0/reshape/shape	1	int32	1	2
+native : stat_summarizer.cc:250 _arg_input_0_0	1	float	4	1	224	224	3
+native : stat_summarizer.cc:250 conv2d0_pre_relu/conv	1	float	4	1	112	112	64
+native : stat_summarizer.cc:250 conv2d0_pre_relu	1	float	4	1	112	112	64
+native : stat_summarizer.cc:250 conv2d0	1	float	4	1	112	112	64
+native : stat_summarizer.cc:250 maxpool0	1	float	4	1	56	56	64
+native : stat_summarizer.cc:250 localresponsenorm0	1	float	4	1	56	56	64
+native : stat_summarizer.cc:250 conv2d1_pre_relu/conv	1	float	4	1	56	56	64
+native : stat_summarizer.cc:250 conv2d1_pre_relu	1	float	4	1	56	56	64
+native : stat_summarizer.cc:250 conv2d1	1	float	4	1	56	56	64
+native : stat_summarizer.cc:250 conv2d2_pre_relu/conv	1	float	4	1	56	56	192
+native : stat_summarizer.cc:250 conv2d2_pre_relu	1	float	4	1	56	56	192
+native : stat_summarizer.cc:250 conv2d2	1	float	4	1	56	56	192
+native : stat_summarizer.cc:250 localresponsenorm1	1	float	4	1	56	56	192
+native : stat_summarizer.cc:250 maxpool1	1	float	4	1	28	28	192
+native : stat_summarizer.cc:250 mixed3a_1x1_pre_relu/conv	1	float	4	1	28	28	64
+native : stat_summarizer.cc:250 mixed3a_1x1_pre_relu	1	float	4	1	28	28	64
+native : stat_summarizer.cc:250 mixed3a_1x1	1	float	4	1	28	28	64
+native : stat_summarizer.cc:250 mixed3a_3x3_bottleneck_pre_relu/conv	1	float	4	1	28	28	96
+native : stat_summarizer.cc:250 mixed3a_3x3_bottleneck_pre_relu	1	float	4	1	28	28	96
+native : stat_summarizer.cc:250 mixed3a_3x3_bottleneck	1	float	4	1	28	28	96
+native : stat_summarizer.cc:250 mixed3a_3x3_pre_relu/conv	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3a_3x3_pre_relu	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3a_3x3	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3a_5x5_bottleneck_pre_relu/conv	1	float	4	1	28	28	16
+native : stat_summarizer.cc:250 mixed3a_5x5_bottleneck_pre_relu	1	float	4	1	28	28	16
+native : stat_summarizer.cc:250 mixed3a_5x5_bottleneck	1	float	4	1	28	28	16
+native : stat_summarizer.cc:250 mixed3a_5x5_pre_relu/conv	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3a_5x5_pre_relu	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3a_5x5	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3a_pool	1	float	4	1	28	28	192
+native : stat_summarizer.cc:250 mixed3a_pool_reduce_pre_relu/conv	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3a_pool_reduce_pre_relu	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3a_pool_reduce	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3a	1	float	4	1	28	28	256
+native : stat_summarizer.cc:250 mixed3b_1x1_pre_relu/conv	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3b_1x1_pre_relu	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3b_1x1	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3b_3x3_bottleneck_pre_relu/conv	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3b_3x3_bottleneck_pre_relu	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3b_3x3_bottleneck	1	float	4	1	28	28	128
+native : stat_summarizer.cc:250 mixed3b_3x3_pre_relu/conv	1	float	4	1	28	28	192
+native : stat_summarizer.cc:250 mixed3b_3x3_pre_relu	1	float	4	1	28	28	192
+native : stat_summarizer.cc:250 mixed3b_3x3	1	float	4	1	28	28	192
+native : stat_summarizer.cc:250 mixed3b_5x5_bottleneck_pre_relu/conv	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3b_5x5_bottleneck_pre_relu	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3b_5x5_bottleneck	1	float	4	1	28	28	32
+native : stat_summarizer.cc:250 mixed3b_5x5_pre_relu/conv	1	float	4	1	28	28	96
+native : stat_summarizer.cc:250 mixed3b_5x5_pre_relu	1	float	4	1	28	28	96
+native : stat_summarizer.cc:250 mixed3b_5x5	1	float	4	1	28	28	96
+native : stat_summarizer.cc:250 mixed3b_pool	1	float	4	1	28	28	256
+native : stat_summarizer.cc:250 mixed3b_pool_reduce_pre_relu/conv	1	float	4	1	28	28	64
+native : stat_summarizer.cc:250 mixed3b_pool_reduce_pre_relu	1	float	4	1	28	28	64
+native : stat_summarizer.cc:250 mixed3b_pool_reduce	1	float	4	1	28	28	64
+native : stat_summarizer.cc:250 mixed3b	1	float	4	1	28	28	480
+native : stat_summarizer.cc:250 maxpool4	1	float	4	1	14	14	480
+native : stat_summarizer.cc:250 mixed4a_1x1_pre_relu/conv	1	float	4	1	14	14	192
+native : stat_summarizer.cc:250 mixed4a_1x1_pre_relu	1	float	4	1	14	14	192
+native : stat_summarizer.cc:250 mixed4a_1x1	1	float	4	1	14	14	192
+native : stat_summarizer.cc:250 mixed4a_3x3_bottleneck_pre_relu/conv	1	float	4	1	14	14	96
+native : stat_summarizer.cc:250 mixed4a_3x3_bottleneck_pre_relu	1	float	4	1	14	14	96
+native : stat_summarizer.cc:250 mixed4a_3x3_bottleneck	1	float	4	1	14	14	96
+native : stat_summarizer.cc:250 mixed4a_3x3_pre_relu/conv	1	float	4	1	14	14	204
+native : stat_summarizer.cc:250 mixed4a_3x3_pre_relu	1	float	4	1	14	14	204
+native : stat_summarizer.cc:250 mixed4a_3x3	1	float	4	1	14	14	204
+native : stat_summarizer.cc:250 mixed4a_5x5_bottleneck_pre_relu/conv	1	float	4	1	14	14	16
+native : stat_summarizer.cc:250 mixed4a_5x5_bottleneck_pre_relu	1	float	4	1	14	14	16
+native : stat_summarizer.cc:250 mixed4a_5x5_bottleneck	1	float	4	1	14	14	16
+native : stat_summarizer.cc:250 mixed4a_5x5_pre_relu/conv	1	float	4	1	14	14	48
+native : stat_summarizer.cc:250 mixed4a_5x5_pre_relu	1	float	4	1	14	14	48
+native : stat_summarizer.cc:250 mixed4a_5x5	1	float	4	1	14	14	48
+native : stat_summarizer.cc:250 mixed4a_pool	1	float	4	1	14	14	480
+native : stat_summarizer.cc:250 mixed4a_pool_reduce_pre_relu/conv	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4a_pool_reduce_pre_relu	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4a_pool_reduce	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4a	1	float	4	1	14	14	508
+native : stat_summarizer.cc:250 mixed4b_1x1_pre_relu/conv	1	float	4	1	14	14	160
+native : stat_summarizer.cc:250 mixed4b_1x1_pre_relu	1	float	4	1	14	14	160
+native : stat_summarizer.cc:250 mixed4b_1x1	1	float	4	1	14	14	160
+native : stat_summarizer.cc:250 mixed4b_3x3_bottleneck_pre_relu/conv	1	float	4	1	14	14	112
+native : stat_summarizer.cc:250 mixed4b_3x3_bottleneck_pre_relu	1	float	4	1	14	14	112
+native : stat_summarizer.cc:250 mixed4b_3x3_bottleneck	1	float	4	1	14	14	112
+native : stat_summarizer.cc:250 mixed4b_3x3_pre_relu/conv	1	float	4	1	14	14	224
+native : stat_summarizer.cc:250 mixed4b_3x3_pre_relu	1	float	4	1	14	14	224
+native : stat_summarizer.cc:250 mixed4b_3x3	1	float	4	1	14	14	224
+native : stat_summarizer.cc:250 mixed4b_5x5_bottleneck_pre_relu/conv	1	float	4	1	14	14	24
+native : stat_summarizer.cc:250 mixed4b_5x5_bottleneck_pre_relu	1	float	4	1	14	14	24
+native : stat_summarizer.cc:250 mixed4b_5x5_bottleneck	1	float	4	1	14	14	24
+native : stat_summarizer.cc:250 mixed4b_5x5_pre_relu/conv	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4b_5x5_pre_relu	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4b_5x5	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4b_pool	1	float	4	1	14	14	508
+native : stat_summarizer.cc:250 mixed4b_pool_reduce_pre_relu/conv	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4b_pool_reduce_pre_relu	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4b_pool_reduce	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4b	1	float	4	1	14	14	512
+native : stat_summarizer.cc:250 mixed4c_1x1_pre_relu/conv	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4c_1x1_pre_relu	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4c_1x1	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4c_3x3_bottleneck_pre_relu/conv	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4c_3x3_bottleneck_pre_relu	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4c_3x3_bottleneck	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4c_3x3_pre_relu/conv	1	float	4	1	14	14	256
+native : stat_summarizer.cc:250 mixed4c_3x3_pre_relu	1	float	4	1	14	14	256
+native : stat_summarizer.cc:250 mixed4c_3x3	1	float	4	1	14	14	256
+native : stat_summarizer.cc:250 mixed4c_5x5_bottleneck_pre_relu/conv	1	float	4	1	14	14	24
+native : stat_summarizer.cc:250 mixed4c_5x5_bottleneck_pre_relu	1	float	4	1	14	14	24
+native : stat_summarizer.cc:250 mixed4c_5x5_bottleneck	1	float	4	1	14	14	24
+native : stat_summarizer.cc:250 mixed4c_5x5_pre_relu/conv	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4c_5x5_pre_relu	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4c_5x5	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4c_pool	1	float	4	1	14	14	512
+native : stat_summarizer.cc:250 mixed4c_pool_reduce_pre_relu/conv	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4c_pool_reduce_pre_relu	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4c_pool_reduce	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4c	1	float	4	1	14	14	512
+native : stat_summarizer.cc:250 mixed4d_1x1_pre_relu/conv	1	float	4	1	14	14	112
+native : stat_summarizer.cc:250 mixed4d_1x1_pre_relu	1	float	4	1	14	14	112
+native : stat_summarizer.cc:250 mixed4d_1x1	1	float	4	1	14	14	112
+native : stat_summarizer.cc:250 mixed4d_3x3_bottleneck_pre_relu/conv	1	float	4	1	14	14	144
+native : stat_summarizer.cc:250 mixed4d_3x3_bottleneck_pre_relu	1	float	4	1	14	14	144
+native : stat_summarizer.cc:250 mixed4d_3x3_bottleneck	1	float	4	1	14	14	144
+native : stat_summarizer.cc:250 mixed4d_3x3_pre_relu/conv	1	float	4	1	14	14	288
+native : stat_summarizer.cc:250 mixed4d_3x3_pre_relu	1	float	4	1	14	14	288
+native : stat_summarizer.cc:250 mixed4d_3x3	1	float	4	1	14	14	288
+native : stat_summarizer.cc:250 mixed4d_5x5_bottleneck_pre_relu/conv	1	float	4	1	14	14	32
+native : stat_summarizer.cc:250 mixed4d_5x5_bottleneck_pre_relu	1	float	4	1	14	14	32
+native : stat_summarizer.cc:250 mixed4d_5x5_bottleneck	1	float	4	1	14	14	32
+native : stat_summarizer.cc:250 mixed4d_5x5_pre_relu/conv	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4d_5x5_pre_relu	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4d_5x5	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4d_pool	1	float	4	1	14	14	512
+native : stat_summarizer.cc:250 mixed4d_pool_reduce_pre_relu/conv	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4d_pool_reduce_pre_relu	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4d_pool_reduce	1	float	4	1	14	14	64
+native : stat_summarizer.cc:250 mixed4d	1	float	4	1	14	14	528
+native : stat_summarizer.cc:250 mixed4e_1x1_pre_relu/conv	1	float	4	1	14	14	256
+native : stat_summarizer.cc:250 mixed4e_1x1_pre_relu	1	float	4	1	14	14	256
+native : stat_summarizer.cc:250 mixed4e_1x1	1	float	4	1	14	14	256
+native : stat_summarizer.cc:250 mixed4e_3x3_bottleneck_pre_relu/conv	1	float	4	1	14	14	160
+native : stat_summarizer.cc:250 mixed4e_3x3_bottleneck_pre_relu	1	float	4	1	14	14	160
+native : stat_summarizer.cc:250 mixed4e_3x3_bottleneck	1	float	4	1	14	14	160
+native : stat_summarizer.cc:250 mixed4e_3x3_pre_relu/conv	1	float	4	1	14	14	320
+native : stat_summarizer.cc:250 mixed4e_3x3_pre_relu	1	float	4	1	14	14	320
+native : stat_summarizer.cc:250 mixed4e_3x3	1	float	4	1	14	14	320
+native : stat_summarizer.cc:250 mixed4e_5x5_bottleneck_pre_relu/conv	1	float	4	1	14	14	32
+native : stat_summarizer.cc:250 mixed4e_5x5_bottleneck_pre_relu	1	float	4	1	14	14	32
+native : stat_summarizer.cc:250 mixed4e_5x5_bottleneck	1	float	4	1	14	14	32
+native : stat_summarizer.cc:250 mixed4e_5x5_pre_relu/conv	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4e_5x5_pre_relu	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4e_5x5	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4e_pool	1	float	4	1	14	14	528
+native : stat_summarizer.cc:250 mixed4e_pool_reduce_pre_relu/conv	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4e_pool_reduce_pre_relu	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4e_pool_reduce	1	float	4	1	14	14	128
+native : stat_summarizer.cc:250 mixed4e	1	float	4	1	14	14	832
+native : stat_summarizer.cc:250 maxpool10	1	float	4	1	7	7	832
+native : stat_summarizer.cc:250 mixed5a_1x1_pre_relu/conv	1	float	4	1	7	7	256
+native : stat_summarizer.cc:250 mixed5a_1x1_pre_relu	1	float	4	1	7	7	256
+native : stat_summarizer.cc:250 mixed5a_1x1	1	float	4	1	7	7	256
+native : stat_summarizer.cc:250 mixed5a_3x3_bottleneck_pre_relu/conv	1	float	4	1	7	7	160
+native : stat_summarizer.cc:250 mixed5a_3x3_bottleneck_pre_relu	1	float	4	1	7	7	160
+native : stat_summarizer.cc:250 mixed5a_3x3_bottleneck	1	float	4	1	7	7	160
+native : stat_summarizer.cc:250 mixed5a_3x3_pre_relu/conv	1	float	4	1	7	7	320
+native : stat_summarizer.cc:250 mixed5a_3x3_pre_relu	1	float	4	1	7	7	320
+native : stat_summarizer.cc:250 mixed5a_3x3	1	float	4	1	7	7	320
+native : stat_summarizer.cc:250 mixed5a_5x5_bottleneck_pre_relu/conv	1	float	4	1	7	7	48
+native : stat_summarizer.cc:250 mixed5a_5x5_bottleneck_pre_relu	1	float	4	1	7	7	48
+native : stat_summarizer.cc:250 mixed5a_5x5_bottleneck	1	float	4	1	7	7	48
+native : stat_summarizer.cc:250 mixed5a_5x5_pre_relu/conv	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5a_5x5_pre_relu	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5a_5x5	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5a_pool	1	float	4	1	7	7	832
+native : stat_summarizer.cc:250 mixed5a_pool_reduce_pre_relu/conv	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5a_pool_reduce_pre_relu	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5a_pool_reduce	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5a	1	float	4	1	7	7	832
+native : stat_summarizer.cc:250 mixed5b_1x1_pre_relu/conv	1	float	4	1	7	7	384
+native : stat_summarizer.cc:250 mixed5b_1x1_pre_relu	1	float	4	1	7	7	384
+native : stat_summarizer.cc:250 mixed5b_1x1	1	float	4	1	7	7	384
+native : stat_summarizer.cc:250 mixed5b_3x3_bottleneck_pre_relu/conv	1	float	4	1	7	7	192
+native : stat_summarizer.cc:250 mixed5b_3x3_bottleneck_pre_relu	1	float	4	1	7	7	192
+native : stat_summarizer.cc:250 mixed5b_3x3_bottleneck	1	float	4	1	7	7	192
+native : stat_summarizer.cc:250 mixed5b_3x3_pre_relu/conv	1	float	4	1	7	7	384
+native : stat_summarizer.cc:250 mixed5b_3x3_pre_relu	1	float	4	1	7	7	384
+native : stat_summarizer.cc:250 mixed5b_3x3	1	float	4	1	7	7	384
+native : stat_summarizer.cc:250 mixed5b_5x5_bottleneck_pre_relu/conv	1	float	4	1	7	7	48
+native : stat_summarizer.cc:250 mixed5b_5x5_bottleneck_pre_relu	1	float	4	1	7	7	48
+native : stat_summarizer.cc:250 mixed5b_5x5_bottleneck	1	float	4	1	7	7	48
+native : stat_summarizer.cc:250 mixed5b_5x5_pre_relu/conv	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5b_5x5_pre_relu	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5b_5x5	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5b_pool	1	float	4	1	7	7	832
+native : stat_summarizer.cc:250 mixed5b_pool_reduce_pre_relu/conv	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5b_pool_reduce_pre_relu	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5b_pool_reduce	1	float	4	1	7	7	128
+native : stat_summarizer.cc:250 mixed5b	1	float	4	1	7	7	1024
+native : stat_summarizer.cc:250 avgpool0	1	float	4	1	1	1	1024
+native : stat_summarizer.cc:250 avgpool0/reshape	1	float	2	1	1024
+native : stat_summarizer.cc:250 softmax2_pre_activation/matmul	1	float	2	1	1008
+native : stat_summarizer.cc:250 softmax2_pre_activation	1	float	2	1	1008
+native : stat_summarizer.cc:250 softmax2	1	float	2	1	1008
+native : stat_summarizer.cc:250 output2	1	float	2	1	1008
+native : stat_summarizer.cc:250 _retval_output2_0_0	0
