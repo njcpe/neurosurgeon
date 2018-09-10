@@ -16,3 +16,6 @@ trimmed.txt
 trimmed.txt~
 regexparse.py
 InceptionV3_Analysis.ipynb
+build/
+dist/
+object_detection.egg-info/
