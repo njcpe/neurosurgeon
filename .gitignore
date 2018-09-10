@@ -19,3 +19,12 @@ InceptionV3_Analysis.ipynb
 build/
 dist/
 object_detection.egg-info/
+object_detection/dev_testers/
+object_detection/dev_testers/json_tester.py
+object_detection/dev_testers/logs
+object_detection/dev_testers/np_to_string_efficiency.py
+object_detection/dev_testers/objDict_tester.py
+object_detection/dev_testers/printAllTensors.py
+object_detection/dev_testers/protobuf_viz.py
+object_detection/dev_testers/tcpserver_tester.py
+object_detection/dev_testers/testing.txt
