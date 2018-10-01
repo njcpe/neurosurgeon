@@ -15,6 +15,8 @@ from tensorflow.python.client import timeline
 
 from utils import label_map_util
 from utils import visualization_utils as vis_util
+
+from utils.caffe_classes import class_names
 from utils.network_utils import NSCPServer
 from tensorflow.python.client import timeline
 
@@ -29,7 +31,7 @@ config = tf.ConfigProto(log_device_placement=True)
 config.gpu_options.allow_growth = True
 
 # Use JIT Compilation to get speed up. Experimental feature.
-config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1
+# config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1
 
 
 # # Path to frozen detection graph. This is the actual model that is used for the object detection.``
@@ -43,15 +45,21 @@ config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON
 # Path to frozen classification graph. This is the actual model that is used for the object classification.``
 MODEL_NAME = 'alexnet'
 MODEL_DIR = 'frozen_models'
-PARTITION_NAME = 'norm1'
+
+PARTITION_NAME = 'Placeholder'
+
 OUTPUT_NAME = 'Softmax'
 
 
 PATH_TO_CKPT = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME, 'quant_alexnet_frozen.pb')
-
+PATH_TO_PARTN = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME)
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'data', 'imagenet_comp_graph_label_strings.txt')
 NUM_CLASSES = 90
+
+
+partitions_dict = {}
+
 
 # Loading label map
 print(">>Using " + MODEL_NAME + " Inference Model")
@@ -78,8 +86,18 @@ def classify_objects(input_data, sess, classification_graph):
         # chrome_trace = fetched_timeline.generate_chrome_trace_format()
         # with open('timeline_01.json', 'w') as f:
         #     f.write(chrome_trace)
+        
 
-        # print('>>tClassify: '+str((time.time() - start)*1000)+' ms')
+        '''
+        This is still in dev at the moment, but I want to move the classifier SVM to the server.
+        '''
+        classifications_sorted = sorted(classifications, key=np.argmax)
+        max_confidence = np.argmax(classifications)
+        confidence = classifications[0,max_confidence]
+        class_name = class_names[max_confidence]
+
+        print(class_name, confidence)
+
     return classifications
 
 def detect_objects(image_np, sess, detection_graph):
@@ -130,12 +148,8 @@ def worker(input_q, output_q):
                 # """
                 # for op in tf.get_default_graph().get_operations():
                 #     print(str(op.name))
-
-                # print([x for x in tf.get_default_graph().get_operations()])
-            
             sess = tf.Session(graph=classification_graph, config=config)  #config enable for JIT
             # sess = tfdbg.LocalCLIDebugWrapperSession(sess)
-        # tfg.board(detection_graph, )
     while True:
         (partitionData, start_time) = input_q.get()
         '''
@@ -156,10 +170,31 @@ if __name__ == '__main__':
     logger = multiprocessing.log_to_stderr()
     logger.setLevel(multiprocessing.SUBWARNING)
 
+    """
+    Read In partition data from txt file (CSV-type format)
+    """
+
+    with open(os.path.join(PATH_TO_PARTN, 'alexnet_partitions.txt'), 'r') as f:
+        
+        partitions = f.readlines()
+        partitions = [x.strip().split(',') for x in partitions]
+
+        for x in partitions:
+            partitions_dict[x[0]] = x[1:len(x)]
+
+        for x, y in partitions_dict.items():
+            partitions_dict[x] = list(map(int, y))
+                
+        for x, y in partitions_dict.items():
+            print(x,y)
+
     server = NSCPServer('', 4002)
     input_q = Queue(maxsize=args.queue_size)
     output_q = Queue(maxsize=args.queue_size)
     pool = Pool(args.num_workers, worker, (input_q, output_q))
+
+    print('>>setting partition point')
+    server.setPartitionPt(PARTITION_NAME, partitions_dict)
 
     oldData = (None,None)
 

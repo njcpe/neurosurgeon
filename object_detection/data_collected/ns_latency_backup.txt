@@ -1,0 +1,17 @@
+layer_name,mobile_processing,server_processing,total_processing
+conv1,34,130,2770
+norm1,48,120,2235
+pool1,48,85,1834
+conv2_1,77,107,2012 
+norm2,86,107,1804
+pool2,73,92,1797
+conv3_1,106,96,1850
+conv4_1,121,84,1863
+conv5_1,133,92,1253
+pool5,164,84,1122
+Reshape_5,163,81,1315
+fc6,398,38,823 
+Relu,403,35,833
+fc7,509,17,1040
+Relu_1,509,15,1038
+fc8,531,7,1083

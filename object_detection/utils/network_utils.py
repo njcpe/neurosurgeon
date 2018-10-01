@@ -8,6 +8,8 @@ import timeit
 from enum import Enum
 from sys import getsizeof
 
+from classification_utils import Frame
+
 import numpy as np
 
 import tensorflow as tf
@@ -91,7 +93,7 @@ class NSCPServer(object):
         self.tServerList = []
         self.avgTServer = 0
 
-        self.inputShape = (1,55,55,96)
+        self.inputShape = (1,9216)
 
         thread = threading.Thread(target=self.run, args=())
         thread.daemon = True                            # Daemonize thread
@@ -126,6 +128,12 @@ class NSCPServer(object):
         # print("RESPONSE: " + response)
         return response.encode()
     
+    def setPartitionPt(self, partitionName, partitionDict):
+        if partitionName in partitionDict.keys():
+            self.inputShape = tuple(partitionDict[partitionName])
+            print("Partition Point set to layer " + partitionName + " with shape " + str(self.inputShape))
+
+
     def run(self):
         self.sessControlSock.listen(5)
         self.dataSock.listen(5)
@@ -194,8 +202,9 @@ class NSCPServer(object):
                             if s not in self.outputs:
                                 self.outputs.append(s)
                             start = time.time()
-                            try:    
-                                self.dataList.append(np.asarray(ujson.loads(body), dtype=float))
+                            try: 
+                                # self.dataList.append(np.asarray(ujson.loads(body), dtype=float))
+                                self.dataList.append(body)
                                 # print(">>data Appended, current len is: " + str(len(self.dataList)))
                             except:
                                 print('Decode Error')
@@ -204,6 +213,10 @@ class NSCPServer(object):
                             if lastPartFlag:
                                 # print('>>Last Part of Message Recv\'d')
                                 dataArr = np.concatenate(self.dataList)
+
+                                print(dataArr)
+
+                                frame = Frame(dataArr)
                                 dataArrShaped = np.reshape(dataArr, newshape=self.inputShape)
                                 dataBundle = (dataArrShaped, start)
                                 self.partitionDataQueue.put(dataBundle)
@@ -292,7 +305,7 @@ class NSCPServer(object):
                 # else:
                 #     self.movingAvgN -= 1
                 print('Instantaneous Server Computation Time: ' + str(tServer) + " ms")
-                # print('Avg Server Computation Time: ' + str((sum(self.tServerList)/(float(len(self.tServerList))))) + ' ms')
+                print('Avg Server Computation Time: ' + str((sum(self.tServerList)/(float(len(self.tServerList))))) + ' ms')
                 # print("data enqueued for connection: " + str(src.getpeername()))
             else:
                 pass
