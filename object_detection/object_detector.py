@@ -20,6 +20,7 @@ from utils.caffe_classes import class_names
 from utils.network_utils import NSCPServer
 from tensorflow.python.client import timeline
 
+import bottleneck as bn
 
 CWD_PATH = os.getcwd()
 LOGDIR = '/tmp/tensorboard'
@@ -74,31 +75,27 @@ def convert_keys_to_string(dictionary):
         return dictionary
     return dict((str(k), convert_keys_to_string(v)) for k, v in dictionary.items())
 
-def classify_objects(input_data, sess, classification_graph):
+def classify_objects(frame, sess, classification_graph):
+    
+    input_data = frame.getImageData()
 
     with tf.device('/device:GPU:0'):
         input_tensor = classification_graph.get_tensor_by_name(PARTITION_NAME + ':0')
         classifications = classification_graph.get_tensor_by_name(OUTPUT_NAME + ':0')
 
-        start = time.time()
         classifications = sess.run(classifications, feed_dict={input_tensor: input_data}, options=options, run_metadata=run_metadata)
         # fetched_timeline = timeline.Timeline(run_metadata.step_stats)
         # chrome_trace = fetched_timeline.generate_chrome_trace_format()
         # with open('timeline_01.json', 'w') as f:
-        #     f.write(chrome_trace)
-        
+        #     f.write(chrome_trace).
+        frame.deleteRawImgData()
 
-        '''
-        This is still in dev at the moment, but I want to move the classifier SVM to the server.
-        '''
-        classifications_sorted = sorted(classifications, key=np.argmax)
-        max_confidence = np.argmax(classifications)
-        confidence = classifications[0,max_confidence]
-        class_name = class_names[max_confidence]
+        ind = np.argpartition(classifications[0], -3)[-3:]
+        sorted_ind = ind[np.argsort(classifications[0,ind])]
+        frame.detected_objects = [class_names[indx] for indx in sorted_ind] 
+        frame.confidences = (classifications[0, sorted_ind]).tolist()
 
-        print(class_name, confidence)
-
-    return classifications
+    return frame
 
 def detect_objects(image_np, sess, detection_graph):
     # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -143,20 +140,13 @@ def worker(input_q, output_q):
                 serialized_graph = fid.read()
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
-                # """
-                # Get all ops in Graph, used for finding part points, DEBUG
-                # """
-                # for op in tf.get_default_graph().get_operations():
-                #     print(str(op.name))
             sess = tf.Session(graph=classification_graph, config=config)  #config enable for JIT
-            # sess = tfdbg.LocalCLIDebugWrapperSession(sess)
     while True:
-        (partitionData, start_time) = input_q.get()
+        frame = input_q.get()
         '''
-        Returns ((classifications, src socket obj.), start time). TODO simplify maybe.
+        Returns (frame Object). TODO simplify maybe.
         '''
-        dataBundle = (classify_objects(partitionData, sess, classification_graph), start_time)
-        output_q.put(dataBundle)
+        output_q.put(classify_objects(frame, sess, classification_graph))
     sess.close()
 
 if __name__ == '__main__':
@@ -206,16 +196,8 @@ if __name__ == '__main__':
                 except:
                     continue
 
-                (classifications, src) = output_q.get()
-                out = (classifications, src)
-                eql = np.array_equal(out[0], oldData[0])
-                if not eql:
-                    oldData = out
-                    start = time.time()
-                    server.appendToMessageBuff(classifications, src)
-                    end = time.time()
-                else:
-                    print('>>theres a problem')
+                frame_obj = output_q.get()
+                server.appendToMessageBuff(frame_obj)
 
         except KeyboardInterrupt:
             # server.shutdown()
