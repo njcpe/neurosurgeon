@@ -1,20 +1,29 @@
 import ujson
 import time
-
+import numpy as np
 class Frame:
     imageData = []
+    input_shape = tuple()
     endToEndStartTime = 0
     endToEndDeltaTime = 0
     serverProcStartTime = 0
     serverProcDeltaTime = 0
 
-    def __init__(self, json_def):
+    detected_objects = []
+    confidences = []
+
+    def __init__(self, json_def, input_shape):
         self.__dict__ = ujson.loads(json_def)
-    
-    def startServerProcTimer(self):
+        self.input_shape = input_shape
         self.serverProcStartTime = time.time()
-        print("server proc timer started")
+    
+    def deleteRawImgData(self):
+        self.imageData.clear()
+
+    def getImageData(self):
+        return np.reshape(np.concatenate([self.imageData]), newshape=self.input_shape)
 
     def stopServerProcTimer(self):
-        self.serverProcDeltaTime = time.time() - self.serverProcStartTime
-        print("server proc timer stopped")
+        self.serverProcDeltaTime = (time.time() - self.serverProcStartTime)*1000
+        print("server proc timer stopped, tServer = " + str(self.serverProcDeltaTime) + " ms")
+        print(type(self.serverProcDeltaTime))

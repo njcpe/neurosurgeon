@@ -20,15 +20,16 @@ from utils.caffe_classes import class_names
 from utils.network_utils import NSCPServer
 from tensorflow.python.client import timeline
 
-import bottleneck as bn
-
 CWD_PATH = os.getcwd()
 LOGDIR = '/tmp/tensorboard'
+
+HALT_SIGNAL = False
 
 options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
 run_metadata = tf.RunMetadata()
 
-config = tf.ConfigProto(log_device_placement=True)
+# config = tf.ConfigProto(log_device_placement=True)
+config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 
 # Use JIT Compilation to get speed up. Experimental feature.
@@ -47,7 +48,7 @@ config.gpu_options.allow_growth = True
 MODEL_NAME = 'alexnet'
 MODEL_DIR = 'frozen_models'
 
-PARTITION_NAME = 'Placeholder'
+PARTITION_NAME = 'norm1'
 
 OUTPUT_NAME = 'Softmax'
 
@@ -129,7 +130,8 @@ def detect_objects(image_np, sess, detection_graph):
     detection_dict_json = json.dumps(detection_dict_annotated)
     return detection_dict_json
 
-def worker(input_q, output_q):
+def worker(input_q, output_q, stop):
+
     # Load a (frozen) Tensorflow model into memory.
     print(">>Loading Frozen Graph")
     with tf.device('/device:GPU:0'):        
@@ -141,13 +143,14 @@ def worker(input_q, output_q):
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
             sess = tf.Session(graph=classification_graph, config=config)  #config enable for JIT
-    while True:
+    while stop == False:
         frame = input_q.get()
         '''
         Returns (frame Object). TODO simplify maybe.
         '''
         output_q.put(classify_objects(frame, sess, classification_graph))
-    sess.close()
+    else:
+        sess.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -157,9 +160,9 @@ if __name__ == '__main__':
                         type=int, default=10, help='Size of the queue.')
     args = parser.parse_args()
 
-    logger = multiprocessing.log_to_stderr()
-    logger.setLevel(multiprocessing.SUBWARNING)
-
+    # logger = multiprocessing.log_to_stderr()
+    # logger.setLevel(multiprocessing.SUBDEBUG)
+    
     """
     Read In partition data from txt file (CSV-type format)
     """
@@ -181,7 +184,7 @@ if __name__ == '__main__':
     server = NSCPServer('', 4002)
     input_q = Queue(maxsize=args.queue_size)
     output_q = Queue(maxsize=args.queue_size)
-    pool = Pool(args.num_workers, worker, (input_q, output_q))
+    pool = Pool(args.num_workers, worker, (input_q, output_q, HALT_SIGNAL))
 
     print('>>setting partition point')
     server.setPartitionPt(PARTITION_NAME, partitions_dict)
@@ -193,6 +196,7 @@ if __name__ == '__main__':
             while (server.isClientConnected and server.isClientReady):
                 try:
                     input_q.put(server.read())
+                    print(input_q.qsize())
                 except:
                     continue
 
@@ -200,14 +204,9 @@ if __name__ == '__main__':
                 server.appendToMessageBuff(frame_obj)
 
         except KeyboardInterrupt:
+            HALT_SIGNAL = True
             # server.shutdown()
             sys.exit()
-            # try:
-            #     pool.terminate()
-            #     break
-            # except:
-            #     print('PROBLEM')
-            #     sys.exit()
 
     print('>>joining pool')
     pool.join()

@@ -8,7 +8,7 @@ import timeit
 from enum import Enum
 from sys import getsizeof
 
-from classification_utils import Frame
+from utils.classification_utils import Frame
 
 import numpy as np
 
@@ -110,19 +110,22 @@ class NSCPServer(object):
 
     def generateResponse(self, requestType, CSeq):
         # print('TESTING: ' + requestType.value)
-        body = ""
+        body = {}
+        body_str = ""
         content_len = 0
 
-        if (requestType == RequestType.SETUP): #TODO: Add partition logic
-            body = "Partition-Point: " + "1" + '\r\n' + \
-                    "UDP-Ports: " + str(self.dataPorts[0]) + ',' + str(self.dataPorts[1])
+        if (requestType == RequestType.SETUP):  #TODO: Add partition logic
             
-            content_len = getsizeof(body.encode())
+            body.update({'Partition-Point': 1})
+            body.update({'UDP-Ports': self.dataPorts})
+
+            body_str = ujson.dumps(body)
+            content_len = getsizeof(body_str.encode())
 
         response = requestType.value + '\r\n' + \
                     'CSeq: ' + str(CSeq) + '\r\n' + \
                     'Content-Length: ' + str(content_len) + '\r\n' + \
-                    body + '\r\n\r\n'
+                    body_str + '\r\n\r\n'
 
 
         # print("RESPONSE: " + response)
@@ -176,6 +179,7 @@ class NSCPServer(object):
                         # print('>>Request Received:\n' + head_str)
                         body = recv_exactly(s, bodyLength)
                         if reqType == RequestType.HELLO:
+                            body = ujson.loads(bytes.decode(body))
                             self.isClientConnected = True
                             if s not in self.outputs:
                                 self.outputs.append(s)
@@ -212,14 +216,9 @@ class NSCPServer(object):
                             
                             if lastPartFlag:
                                 # print('>>Last Part of Message Recv\'d')
-                                dataArr = np.concatenate(self.dataList)
-
-                                print(dataArr)
-
-                                frame = Frame(dataArr)
-                                dataArrShaped = np.reshape(dataArr, newshape=self.inputShape)
-                                dataBundle = (dataArrShaped, start)
-                                self.partitionDataQueue.put(dataBundle)
+                                dataArr = b''.join(self.dataList)
+                                newestFrame = Frame(dataArr, self.inputShape)
+                                self.partitionDataQueue.put(newestFrame)
                                 self.dataList.clear()
 
                         elif reqType == RequestType.TEARDOWN:
@@ -278,8 +277,9 @@ class NSCPServer(object):
                 del self.message_queues[s]
         
     def generateDataMsg(self, body, dataCSeq):
-
-        body_serialized = ujson.dumps(body.tolist())
+        body.stopServerProcTimer()
+        body_serialized = ujson.dumps(body)
+        print(body_serialized)
         content_len = getsizeof(body_serialized.encode())
         seq = [
             'DATA', '\r\n',
@@ -290,23 +290,11 @@ class NSCPServer(object):
         message = ''.join(seq)
         return message.encode()
 
-    def appendToMessageBuff(self, data, start_time):
+    def appendToMessageBuff(self, data):
         for s in self.outputs:
             if (self.message_queues[s].full() == False and s.getsockname()[1] == self.dataPorts[0]):
                 self.dataCSeq += 1
                 self.message_queues[s].put(self.generateDataMsg(data, self.dataCSeq))
-                end = time.time()
-                tServer = (end - start_time) * 1000
-                self.tServerList.append(tServer)
-                # if(self.movingAvgN == 0):
-                #     self.tServerList.pop()
-                #     self.movingAvgN = 5
-                #     print("popped")
-                # else:
-                #     self.movingAvgN -= 1
-                print('Instantaneous Server Computation Time: ' + str(tServer) + " ms")
-                print('Avg Server Computation Time: ' + str((sum(self.tServerList)/(float(len(self.tServerList))))) + ' ms')
-                # print("data enqueued for connection: " + str(src.getpeername()))
             else:
                 pass
             # print("appended to obuff for " + s.getpeername()[0])

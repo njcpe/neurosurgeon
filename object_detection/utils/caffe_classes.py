@@ -1,5 +1,5 @@
-class_names = '''tench, Tinca tinca
-goldfish, Carassius auratus
+class_names = '''tench
+goldfish
 great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias
 tiger shark, Galeocerdo cuvieri
 hammerhead, hammerhead shark
