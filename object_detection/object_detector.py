@@ -48,7 +48,7 @@ config.gpu_options.allow_growth = True
 MODEL_NAME = 'alexnet'
 MODEL_DIR = 'frozen_models'
 
-PARTITION_NAME = 'norm1'
+PARTITION_NAME = 'pool5'
 
 OUTPUT_NAME = 'Softmax'
 
@@ -146,7 +146,7 @@ def worker(input_q, output_q, stop):
     while stop == False:
         frame = input_q.get()
         '''
-        Returns (frame Object). TODO simplify maybe.
+        Returns Frame object
         '''
         output_q.put(classify_objects(frame, sess, classification_graph))
     else:

@@ -165,6 +165,7 @@ class NSCPServer(object):
                     # Recv and parse Header
                     head = recv_exactly(s, self.HEADER_SIZE)
                     head_str = (head.decode('utf-8')).strip()
+                    print(head_str)
                     if head_str:
                         headerParts = (head_str).splitlines()
                         try:
@@ -179,6 +180,7 @@ class NSCPServer(object):
                         # print('>>Request Received:\n' + head_str)
                         body = recv_exactly(s, bodyLength)
                         if reqType == RequestType.HELLO:
+                            print("BODY IS: " + str(body))
                             body = ujson.loads(bytes.decode(body))
                             self.isClientConnected = True
                             if s not in self.outputs:
