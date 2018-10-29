@@ -48,12 +48,12 @@ config.gpu_options.allow_growth = True
 MODEL_NAME = 'alexnet'
 MODEL_DIR = 'frozen_models'
 
-PARTITION_NAME = 'pool5'
+PARTITION_NAME = 'Placeholder'
 
 OUTPUT_NAME = 'Softmax'
 
 
-PATH_TO_CKPT = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME, 'quant_alexnet_frozen.pb')
+PATH_TO_CKPT = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME, 'frozen_inference_graph.pb')
 PATH_TO_PARTN = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME)
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'data', 'imagenet_comp_graph_label_strings.txt')
@@ -79,6 +79,14 @@ def convert_keys_to_string(dictionary):
 def classify_objects(frame, sess, classification_graph):
     
     input_data = frame.getImageData()
+
+    # print(type(input_data[0]))
+
+    # cv2.imshow('image',input_data)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    # print('DATA: ' + input_data)
 
     with tf.device('/device:GPU:0'):
         input_tensor = classification_graph.get_tensor_by_name(PARTITION_NAME + ':0')

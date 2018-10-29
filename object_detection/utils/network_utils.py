@@ -220,6 +220,8 @@ class NSCPServer(object):
                                 # print('>>Last Part of Message Recv\'d')
                                 dataArr = b''.join(self.dataList)
                                 newestFrame = Frame(dataArr, self.inputShape)
+
+                                # print(newestFrame.__dict__(2))
                                 self.partitionDataQueue.put(newestFrame)
                                 self.dataList.clear()
 
