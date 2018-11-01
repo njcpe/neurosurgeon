@@ -53,7 +53,7 @@ PARTITION_NAME = 'Placeholder'
 OUTPUT_NAME = 'Softmax'
 
 
-PATH_TO_CKPT = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME, 'frozen_inference_graph.pb')
+PATH_TO_CKPT = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME, 'alexnet_frozen.pb')
 PATH_TO_PARTN = os.path.join(CWD_PATH, MODEL_DIR, MODEL_NAME)
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'data', 'imagenet_comp_graph_label_strings.txt')

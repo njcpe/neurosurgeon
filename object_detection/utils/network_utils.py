@@ -15,7 +15,7 @@ import numpy as np
 import tensorflow as tf
 import json  # TODO: migrate to msgpack!
 import ujson  # TODO: migrate to msgpack!
-
+import msgpack
 
 class RequestType(Enum):
     HELLO = 'OK'
@@ -181,7 +181,6 @@ class NSCPServer(object):
                         body = recv_exactly(s, bodyLength)
                         if reqType == RequestType.HELLO:
                             print("BODY IS: " + str(body))
-                            body = ujson.loads(bytes.decode(body))
                             self.isClientConnected = True
                             if s not in self.outputs:
                                 self.outputs.append(s)
@@ -208,7 +207,7 @@ class NSCPServer(object):
                             if s not in self.outputs:
                                 self.outputs.append(s)
                             start = time.time()
-                            try: 
+                            try:
                                 # self.dataList.append(np.asarray(ujson.loads(body), dtype=float))
                                 self.dataList.append(body)
                                 # print(">>data Appended, current len is: " + str(len(self.dataList)))

@@ -1,3 +1,4 @@
+import msgpack
 import ujson
 import time
 import numpy as np
@@ -13,7 +14,9 @@ class Frame:
     confidences = []
 
     def __init__(self, json_def, input_shape):
+        # print(msgpack.unpackb(json_def))
         self.__dict__ = ujson.loads(json_def)
+        print(type(self.imageData[0]))
         self.input_shape = input_shape
         self.serverProcStartTime = time.time()
     

@@ -13,4 +13,4 @@ labels = categorical(nslatency.layer_name,nslatency.layer_name);
 
 bar(labels,partial_timings, 'stacked');
 
-legend({'mobile processing','transmission','mobile processing'}, 'Location','Best');
+legend({'mobile processing','transmission','server processing'}, 'Location','Best');
