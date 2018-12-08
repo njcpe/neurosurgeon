@@ -1,29 +1,16 @@
-## Facial Detection Over IP
-The goal of this project is to detect Faces in live IP Camera footage. We use Tensorflow as our back end and build off of the
-SSD MobileNet Architecture. Versions using Inception V1/V2 are being explored for higher accuracy.
-
-[Video Exposition](https://youtu.be/-ED7T9X5zcY)
+## Neurosurgeon Implementation (Single Image Adaptation)
+We aim to use UDP socket programming as well as the Tensorflow API to measure the composite end-to-end delay of offloading Image Classification. 
 
 ## Motivation
-We take in a live video stream from a network connected camera and perform image classification on the frames of this video. This video is then sent over LAN to an embedded device for display purposes (i.e. ARM Processor).
-
-By taking this approach, we can allow users to explore image classification output on devices not powerful enough to perform these computations themselves. Additionally, any smartphone can act as the video source.
+This testbench is being used as part of ongoing research into Machine Learning Task Partitioning by Noah Johnson, Xiangqi Kong, and Dr. Bin Li of the University of Rhode Island Smart Networking and Computing Lab.
 
 ## Tech/framework used
 
 <b>Built with</b>
 - [TensorFlow](https://www.tensorflow.org/)
-- [OpenCV](https://opencv.org/)
-- [NVIDIA cuDNN](https://developer.nvidia.com/cudnn)
-- [COCO Dataset](http://cocodataset.org/)
 
 ## To Do List
-- [ ] Make Install Guide for Linux (CPU Only)
-- [X] Make Install Guide for Linux (GPU)
-- [ ] Reduce calls to frozen graph
-- [ ] Rebuild to utilize Intel MKL-DNN, AVX2, JIT
-- [ ] Extract frames from video at system edge
-- [ ] Apply Transfer Learning and train using [LFW Database](http://vis-www.cs.umass.edu/lfw/)
+- [ ] Adapt to use UDP instead of TCP (TCP is too slow)
 
 ## Environment Installation / Setup - TensorFlow CPU
 
@@ -47,9 +34,26 @@ By taking this approach, we can allow users to explore image classification outp
     ```Python
     Hello, TensorFlow!
     ```
-  
   #### Linux
-  Coming soon. 
+  - Install [Anaconda](https://www.anaconda.com/distribution/) and add it to `$PATH` if you dont already have it. 
+  - Install Tensorflow CPU and all dependencies:
+    ```
+    conda create --name tf python=3.5
+    source activate tf
+    conda install scipy
+    pip install tensorflow
+    ```
+  - If everything is installed correctly then this test code
+    ```Python
+    >> import tensorflow as tf
+    >> hello = tf.constant('Hello, TensorFlow!')
+    >> sess = tf.Session()
+    >> print(sess.run(hello))
+    ```
+    Should return
+    ```Python
+    Hello, TensorFlow!
+    ```
 
 ## Environment Installation / Setup - TensorFlow + NVIDIA GPU
 
@@ -84,9 +88,11 @@ By taking this approach, we can allow users to explore image classification outp
   - Go take a walk because you're done and you deserve it.
   
   #### Linux
-  Coming soon. 
   
-## Project Dependencies
+  - See [this](https://medium.com/codezillas/step-by-step-guide-to-install-tensorflow-gpu-on-ubuntu-18-04-lts-6feceb0df5c0) guide, it does a great job of explaining the protocol for installing.
+   
+  
+## Project Dependencies (Need to update this part still)
 A full list of dependencies can be found in [env.yml](https://github.com/njohnsoncpe/facialRecognition/blob/master/env.yml). [Anaconda maintains](https://conda.io/docs/commands/env/conda-env-create.html) that an equivalent enviroment to mine can be built using: 
 ```
 conda env create -f env.yml -n tf-gpu 
