@@ -9,24 +9,24 @@ class Frame:
     endToEndDeltaTime = 0
     serverProcStartTime = 0
     serverProcDeltaTime = 0
-
+    mobileProcDeltaTime = 0
+    transmitStartTime = 0
     detected_objects = []
     confidences = []
 
-    def __init__(self, json_def, input_shape):
-        # print(msgpack.unpackb(json_def))
-        self.__dict__ = ujson.loads(json_def)
-        print(type(self.imageData[0]))
-        self.input_shape = input_shape
+    def __init__(self, imageData, mobileProcDeltaTime, transmitStartTime, endToEndStartTime):
+        self.imageData = imageData
+        self.mobileProcDeltaTime = mobileProcDeltaTime
+        self.transmitStartTime = transmitStartTime
         self.serverProcStartTime = time.time()
+        self.endToEndStartTime = endToEndStartTime
     
     def deleteRawImgData(self):
-        self.imageData.clear()
+        self.imageData = None
 
     def getImageData(self):
-        return np.reshape(np.concatenate([self.imageData]), newshape=self.input_shape)
+        return self.imageData
 
     def stopServerProcTimer(self):
         self.serverProcDeltaTime = (time.time() - self.serverProcStartTime)*1000
         print("server proc timer stopped, tServer = " + str(self.serverProcDeltaTime) + " ms")
-        print(type(self.serverProcDeltaTime))

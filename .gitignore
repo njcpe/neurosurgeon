@@ -52,3 +52,8 @@ object_detection/utils/__pycache__/caffe_classes.cpython-36.pyc
 object_detection/utils/__pycache__/classification_utils.cpython-36.pyc
 object_detection/utils/__pycache__
 /dev_testers/
+object_detection/it.py
+object_detection/dataList.txt
+object_detection/dataList.csv
+object_detection/object_detector.py~
+object_detection/reconstructed.jpg

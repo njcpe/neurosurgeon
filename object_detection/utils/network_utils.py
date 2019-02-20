@@ -17,6 +17,10 @@ import json  # TODO: migrate to msgpack!
 import ujson  # TODO: migrate to msgpack!
 import msgpack
 
+from io import BytesIO
+
+import imageSocketTester as ist
+
 class RequestType(Enum):
     HELLO = 'OK'
     SETUP = 'SETUP'
@@ -53,34 +57,32 @@ class NSCPServer(object):
     """
 
 
-    def __init__(self, host, port, interval=1):
+    def __init__(self, host, interval=1):
         """ Constructor
         :type interval: int
         :param interval: Check interval, in seconds
         """
-        #TCP Setup
+        #UDP Setup
 
         self.HEADER_SIZE = 60
 
 
         self.interval = interval
         self.host = host
-        self.port = port
         self.isClientReady = False
         self.isClientConnected = False
-        self.sessControlSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sessControlSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sessControlSock.bind((self.host, self.port))
+        self.controlPorts = [9998, 9998]  #UDP Port array defaults, [0] is the port that server recieves on, [1] is the one that the server will target.
+        
+        self.sessControlSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sessControlSock.bind((self.host, self.controlPorts[0]))
+    
         self.message_queues = {}
 
         self.oldData = ''
 
-        self.movingAvgN = 5
-
-        #TCP Setup (DATA)
-        self.dataSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.dataSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.dataPorts = [4008, 4010]  #UDP Port array defaults, [0] is the port that server recieves on, [1] is the one that the server will target.
+        #UDP Setup (DATA)
+        self.dataSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.dataPorts = [9999, 9999]  #UDP Port array defaults, [0] is the port that server recieves on, [1] is the one that the server will target.
         self.partitionDataQueue = queue.Queue(maxsize=2)
         self.dataSock.bind(('', self.dataPorts[0]))
         self.dataCSeq = 0
@@ -95,9 +97,44 @@ class NSCPServer(object):
 
         self.inputShape = (1,9216)
 
-        thread = threading.Thread(target=self.run, args=())
-        thread.daemon = True                            # Daemonize thread
-        thread.start()                                 # Start the execution
+        # thread = threading.Thread(target=self.run, args=())
+        # thread.daemon = True                            # Daemonize thread
+        # thread.start()
+        
+    def recvMsgpack(self, client):
+        nil = b"\xc0" 
+        """receive one msgpack formatted packet from client. If socket is closed,
+        empty string is returned even if some data received.
+
+        IMPORTANT: The last part of the packet MUST be a .packNil()
+        """
+        bytebuf = []
+        unpacker = msgpack.Unpacker(use_list=True, raw=False)
+        
+        while nil not in bytebuf:
+            bytebuf = client.recv(32)
+            
+            unpacker.feed(bytebuf)
+        for m in unpacker:
+            return m
+
+    def sendMsgpack(self,client, message):
+        """
+        Send a message as a msgpack encoded object (binary type)
+        Takes: 
+            client socket to send message (type socket)
+            message dict of objects to send (type dict)
+        """
+
+        bytesout = BytesIO()
+        msgpack.pack(message, bytesout)
+        msgpack.pack(None,bytesout) 
+        bytesout.seek(0)
+        for l in bytesout:
+            print(l)
+        bytesout.seek(0)
+        client.send(bytesout.getvalue())
+                   # Start the execution
 
     def read(self):
         '''
@@ -151,17 +188,77 @@ class NSCPServer(object):
                     client, address = self.sessControlSock.accept()
                     self.inputs.append(client)
                     print("connection from:", address)
-                    client.setblocking(0)
+                    # client.setblocking(0)
                     self.message_queues[client] = queue.Queue(maxsize=2)
 
                 elif s is self.dataSock:
                     client, address = self.dataSock.accept()
                     self.inputs.append(client)
                     print("data connection from: ", address)
-                    client.setblocking(0)
+                    # client.setblocking(0)
                     self.message_queues[client] = queue.Queue(maxsize=2)
 
                 else:
+                    msgDict = self.recvMsgpack(s)
+                    print(msgDict)
+                    reqType = RequestType[msgDict.get("Request-Type",'')]
+                    cSeq = msgDict.get("CSeq", '')
+                    print(reqType)
+
+                    if reqType == RequestType.HELLO:
+                        print("HELLO Recv'd")
+                        self.isClientConnected = True
+                        if s not in self.outputs:
+                            self.outputs.append(s)
+                        # Add output channel for response
+                        resp = self.generateResponse(reqType, cSeq)
+                        self.message_queues[s].put(resp)
+
+                    elif reqType == RequestType.SETUP:
+                        print("SETUP Recv'd")
+                     
+                        resp = self.generateResponse(reqType, cSeq)
+                        self.message_queues[s].put(resp)
+                        self.isClientReady = True
+
+                    elif reqType == RequestType.DATA:
+                        print("DATA Recv'd")
+                        '''
+                        deserialize JSON float array into np.ndarray with appropriate shape.
+                        '''
+                        if s not in self.outputs:
+                            self.outputs.append(s)
+                        start = time.time()
+                        dataArr = b''.join(self.dataList)
+                        newestFrame = Frame(dataArr, self.inputShape)
+
+                        self.partitionDataQueue.put(newestFrame)
+                        self.dataList.clear()
+
+                    elif reqType == RequestType.TEARDOWN:
+                        print(">>disconnect request recv'd")
+                        self.isClientReady = False
+                        self.isClientConnected = False
+                        print("Removing client at " + str(s.getpeername()
+                                                        [0]) + ':' + str(s.getpeername()[1]))
+                        if s in self.inputs:
+                            self.inputs.remove(s)
+                            print("removed from inputs")
+                        if s in self.outputs:
+                            self.outputs.remove(s)
+                            print("removed from outputs")
+                        
+                        for k in self.message_queues.keys():
+                            print(k)
+                            print(type(k))
+                        
+                        del self.message_queues[s.getpeername()[0]]
+
+
+                    else:
+                        print("you shouldn't be here")
+                        self.message_queues[s].put(self.generateResponse(reqType, cSeq))
+
                     # Recv and parse Header
                     head = recv_exactly(s, self.HEADER_SIZE)
                     head_str = (head.decode('utf-8')).strip()
@@ -300,13 +397,3 @@ class NSCPServer(object):
                 self.message_queues[s].put(self.generateDataMsg(data, self.dataCSeq))
             else:
                 pass
-            # print("appended to obuff for " + s.getpeername()[0])
-        # else:
-        #     print('msg queue for ' + str(src.getpeername()) + ' does not exist!')
-            # for s in self.outputs:
-            #     print('OUTPUT: ' + str(s))
-            # for s in self.inputs:
-            #     print('INPUT: ' + str(s))
-            # for s in self.message_queues:
-            #     print('MESSAGE QUEUE: ' + str(s))
-            # print('SRC: ' + str(src))

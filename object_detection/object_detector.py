@@ -7,7 +7,6 @@ import sys
 import time
 from multiprocessing import Pool, Queue
 
-import cv2
 import numpy as np
 import tensorflow as tf
 from tensorflow.python import debug as tfdbg
@@ -19,6 +18,8 @@ from utils import visualization_utils as vis_util
 from utils.caffe_classes import class_names
 from utils.network_utils import NSCPServer
 from tensorflow.python.client import timeline
+
+# from udp_testing import EasyUDPServer, MyUDPRequestHandler
 
 CWD_PATH = os.getcwd()
 LOGDIR = '/tmp/tensorboard'
@@ -64,8 +65,8 @@ partitions_dict = {}
 
 
 # Loading label map
-print(">>Using " + MODEL_NAME + " Inference Model")
-print(">>Loading Label Map")
+# print(">>Using " + MODEL_NAME + " Inference Model")
+# print(">>Loading Label Map")
 # label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 # categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 # category_index = label_map_util.create_category_index(categories)
@@ -80,14 +81,6 @@ def classify_objects(frame, sess, classification_graph):
     
     input_data = frame.getImageData()
 
-    # print(type(input_data[0]))
-
-    # cv2.imshow('image',input_data)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-
-    # print('DATA: ' + input_data)
-
     with tf.device('/device:GPU:0'):
         input_tensor = classification_graph.get_tensor_by_name(PARTITION_NAME + ':0')
         classifications = classification_graph.get_tensor_by_name(OUTPUT_NAME + ':0')
@@ -98,12 +91,13 @@ def classify_objects(frame, sess, classification_graph):
         # with open('timeline_01.json', 'w') as f:
         #     f.write(chrome_trace).
         frame.deleteRawImgData()
-
+        
         ind = np.argpartition(classifications[0], -3)[-3:]
         sorted_ind = ind[np.argsort(classifications[0,ind])]
         frame.detected_objects = [class_names[indx] for indx in sorted_ind] 
         frame.confidences = (classifications[0, sorted_ind]).tolist()
-
+        print(frame.detected_objects)
+        print(frame.confidences)
     return frame
 
 def detect_objects(image_np, sess, detection_graph):
@@ -136,12 +130,13 @@ def detect_objects(image_np, sess, detection_graph):
     detection_dict_annotated = {}
     detection_dict_annotated = [{"object_location": i, "object_data": j} for i, j in detection_dict.items()]
     detection_dict_json = json.dumps(detection_dict_annotated)
-    return detection_dict_json
+    return detection_dict_json    
 
-def worker(input_q, output_q, stop):
+
+def worker(input_q, output_q,):
 
     # Load a (frozen) Tensorflow model into memory.
-    print(">>Loading Frozen Graph")
+    # print(">>Loading Frozen Graph")
     with tf.device('/device:GPU:0'):        
         classification_graph = tf.Graph()
         with classification_graph.as_default():
@@ -151,15 +146,21 @@ def worker(input_q, output_q, stop):
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
             sess = tf.Session(graph=classification_graph, config=config)  #config enable for JIT
-    while stop == False:
-        frame = input_q.get()
-        '''
-        Returns Frame object
-        '''
-        output_q.put(classify_objects(frame, sess, classification_graph))
-    else:
+    
+    try:
+        while 1:
+            try:
+                frame = input_q.get_nowait()
+                '''
+                Returns Frame object
+                '''
+                output_q.put(classify_objects(frame, sess, classification_graph))
+            except:
+                continue
+    except KeyboardInterrupt:
+        print("closing session...")
         sess.close()
-
+ 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-nw', '--num-workers', dest='num_workers',
@@ -187,35 +188,48 @@ if __name__ == '__main__':
             partitions_dict[x] = list(map(int, y))
                 
         for x, y in partitions_dict.items():
-            print(x,y)
-
-    server = NSCPServer('', 4002)
+            # print(x,y)
+            pass
+    
+    ServerAddress = ('', 9998)
     input_q = Queue(maxsize=args.queue_size)
     output_q = Queue(maxsize=args.queue_size)
-    pool = Pool(args.num_workers, worker, (input_q, output_q, HALT_SIGNAL))
 
-    print('>>setting partition point')
-    server.setPartitionPt(PARTITION_NAME, partitions_dict)
+    server = EasyUDPServer(input_queue=input_q, output_queue=output_q, handler=MyUDPRequestHandler, addr=ServerAddress, poll_interval=0.001)
 
-    oldData = (None,None)
+    pool = Pool(args.num_workers, worker, (input_q, output_q))
 
-    while True:
-        try:
-            while (server.isClientConnected and server.isClientReady):
-                try:
-                    input_q.put(server.read())
-                    print(input_q.qsize())
-                except:
-                    continue
+    # print('>>setting partition point')
+    # server.setPartitionPt(PARTITION_NAME, partitions_dict)
 
-                frame_obj = output_q.get()
-                server.appendToMessageBuff(frame_obj)
+    server.start()
+    
+    input("hit enter to stop")
+    # oldData = (None,None)
+    #try:  
+    #    while True:
+    #        try:
+    #            print(server.read())
+    #        except:
+    #            continue
 
-        except KeyboardInterrupt:
-            HALT_SIGNAL = True
-            # server.shutdown()
-            sys.exit()
+    #except KeyboardInterrupt:
+    #    server.stop()
+    #    sys.exit()
 
-    print('>>joining pool')
-    pool.join()
-    print('>>the end')
+    #     try:
+    #         while (True):
+    #             try:
+    #                 # input_q.put(server.read())
+    #                 # print(input_q.qsize())
+    #                 pass
+    #             except:
+    #                 continue
+
+    #             # frame_obj = output_q.get()
+    #             # server.appendToMessageBuff(frame_obj)
+
+
+    # print('>>joining pool')
+    # pool.join()
+    # print('>>the end')
