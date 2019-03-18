@@ -19,8 +19,6 @@ import msgpack
 
 from io import BytesIO
 
-import imageSocketTester as ist
-
 class RequestType(Enum):
     HELLO = 'OK'
     SETUP = 'SETUP'
@@ -167,6 +165,7 @@ class NSCPServer(object):
 
         # print("RESPONSE: " + response)
         return response.encode()
+    
     
     def setPartitionPt(self, partitionName, partitionDict):
         if partitionName in partitionDict.keys():

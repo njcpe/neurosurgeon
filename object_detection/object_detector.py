@@ -19,8 +19,7 @@ from utils.caffe_classes import class_names
 from utils.network_utils import NSCPServer
 from tensorflow.python.client import timeline
 
-# from udp_testing import EasyUDPServer, MyUDPRequestHandler
-
+#TODO: Make this a spaghetti code class-based
 CWD_PATH = os.getcwd()
 LOGDIR = '/tmp/tensorboard'
 
@@ -49,7 +48,7 @@ config.gpu_options.allow_growth = True
 MODEL_NAME = 'alexnet'
 MODEL_DIR = 'frozen_models'
 
-PARTITION_NAME = 'Placeholder'
+PARTITION_NAME = 'conv1_1'
 
 OUTPUT_NAME = 'Softmax'
 
@@ -63,14 +62,24 @@ NUM_CLASSES = 90
 
 partitions_dict = {}
 
+def readPartitionData():
+        with open(os.path.join(PATH_TO_PARTN, 'alexnet_partitions.txt'), 'r') as f:
+        
+            partitions = f.readlines()
+            partitions = [x.strip().split(',') for x in partitions]
 
-# Loading label map
-# print(">>Using " + MODEL_NAME + " Inference Model")
-# print(">>Loading Label Map")
-# label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
-# categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
-# category_index = label_map_util.create_category_index(categories)
-    
+            for x in partitions:
+                partitions_dict[x[0]] = x[1:len(x)]
+
+            for x, y in partitions_dict.items():
+                partitions_dict[x] = list(map(int, y))
+                    
+            for x, y in partitions_dict.items():
+                pass
+
+            f.close()
+        print(type(partitions_dict.get('Placeholder')))
+
 def convert_keys_to_string(dictionary):
     """Recursively converts dictionary keys to strings."""
     if not isinstance(dictionary, dict):
@@ -96,8 +105,8 @@ def classify_objects(frame, sess, classification_graph):
         sorted_ind = ind[np.argsort(classifications[0,ind])]
         frame.detected_objects = [class_names[indx] for indx in sorted_ind] 
         frame.confidences = (classifications[0, sorted_ind]).tolist()
-        print(frame.detected_objects)
-        print(frame.confidences)
+        # print(frame.detected_objects)
+        # print(frame.confidences)
     return frame
 
 def detect_objects(image_np, sess, detection_graph):
@@ -160,76 +169,3 @@ def worker(input_q, output_q,):
     except KeyboardInterrupt:
         print("closing session...")
         sess.close()
- 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-nw', '--num-workers', dest='num_workers',
-                        type=int, default=1, help='Number of workers.')
-    parser.add_argument('-qs', '--queue-size', dest='queue_size',
-                        type=int, default=10, help='Size of the queue.')
-    args = parser.parse_args()
-
-    # logger = multiprocessing.log_to_stderr()
-    # logger.setLevel(multiprocessing.SUBDEBUG)
-    
-    """
-    Read In partition data from txt file (CSV-type format)
-    """
-
-    with open(os.path.join(PATH_TO_PARTN, 'alexnet_partitions.txt'), 'r') as f:
-        
-        partitions = f.readlines()
-        partitions = [x.strip().split(',') for x in partitions]
-
-        for x in partitions:
-            partitions_dict[x[0]] = x[1:len(x)]
-
-        for x, y in partitions_dict.items():
-            partitions_dict[x] = list(map(int, y))
-                
-        for x, y in partitions_dict.items():
-            # print(x,y)
-            pass
-    
-    ServerAddress = ('', 9998)
-    input_q = Queue(maxsize=args.queue_size)
-    output_q = Queue(maxsize=args.queue_size)
-
-    server = EasyUDPServer(input_queue=input_q, output_queue=output_q, handler=MyUDPRequestHandler, addr=ServerAddress, poll_interval=0.001)
-
-    pool = Pool(args.num_workers, worker, (input_q, output_q))
-
-    # print('>>setting partition point')
-    # server.setPartitionPt(PARTITION_NAME, partitions_dict)
-
-    server.start()
-    
-    input("hit enter to stop")
-    # oldData = (None,None)
-    #try:  
-    #    while True:
-    #        try:
-    #            print(server.read())
-    #        except:
-    #            continue
-
-    #except KeyboardInterrupt:
-    #    server.stop()
-    #    sys.exit()
-
-    #     try:
-    #         while (True):
-    #             try:
-    #                 # input_q.put(server.read())
-    #                 # print(input_q.qsize())
-    #                 pass
-    #             except:
-    #                 continue
-
-    #             # frame_obj = output_q.get()
-    #             # server.appendToMessageBuff(frame_obj)
-
-
-    # print('>>joining pool')
-    # pool.join()
-    # print('>>the end')
