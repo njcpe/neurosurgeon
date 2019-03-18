@@ -1,6 +1,6 @@
 layer_name,d1,d2,d3,d4
-Placeholder,1,227,227,3
-conv1_1,1,55,55,96
+Placeholder,1,227,227,3 
+conv1_1,1,55,55,96 
 norm1,1,55,55,96
 pool1,1,27,27,96
 conv2_1,1,27,27,256

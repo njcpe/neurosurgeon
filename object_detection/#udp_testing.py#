@@ -170,7 +170,7 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                 self.inputShape = server.inputShape
                 #self.plot = server.plot
                 #self.fig = server.fig
-
+                
                 DatagramRequestHandler.__init__(self, request, client_address, server)
 
             def handle(self):
@@ -181,6 +181,8 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                 global mobileProcTime 
                 global transmitStartTime
                 global endToEndStartTime
+
+                print(self.rfile.read1(-1))
 
                 flatten = lambda l: [item for sublist in l for item in sublist]
                 flattenDecode = lambda l: [n for sublist in l for n in b64.b64decode(sublist)]
@@ -255,6 +257,7 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                                     tfarr = tfarr.reshape(self.inputShape)
                                     frame = Frame(tfarr,mobileProcTime,transmitStartTime,endToEndStartTime)
                                     self.input_queue.put(frame)
+                                    # print("put")
                                     results = generateResultMsg(self.output_queue.get())
                                     socket.sendto(results, (self.client_address[0], controlPort))
 
@@ -277,11 +280,61 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                         f.write(line)
                         f.write("\n")
                     
+                    #plot[0,0].clear()
+                    #plot[0,1].clear()
+                    #plot[1,0].clear()
+                    #plot[1,1].clear()
 
+                    #weights = np.ones_like(mobileTimings)/float(len(mobileTimings))
+                    #plot[0,0].hist(mobileTimings, weights=weights, bins=len(np.unique(mobileTimings)))
+                    # plot[0,0].hist(mobileTimings, weights=weights, bins=len(mobileTimings))
+
+                    #weights = np.ones_like(transmitTimings)/float(len(transmitTimings))                    
+                    #plot[0,1].hist(transmitTimings,weights=weights,bins=len(np.unique(transmitTimings)))
+                    # plot[0,1].hist(transmitTimings,weights=weights,bins=len(transmitTimings))
+
+                    #weights = np.ones_like(serverTimings)/float(len(serverTimings))
+                    #plot[1,0].hist(serverTimings,weights=weights, bins=len(np.unique(serverTimings)))
+                    # plot[1,0].hist(serverTimings,weights=weights, bins=len(serverTimings))
+
+                    #weights = np.ones_like(end2EndTimings)/float(len(end2EndTimings))
+                    #plot[1,1].hist(end2EndTimings, weights=weights, bins=len(np.unique(end2EndTimings)))
+                    # plot[1,1].hist(end2EndTimings, weights=weights, bins=len(end2EndTimings)))
+                    
+                    #plot[0,0].set_title('Mobile Processing')
+                    #plot[0,1].set_title('Transmission Time')
+                    #plot[1,0].set_title('Server Processing')
+                    #plot[1,1].set_title('Total Delay')
+                    
+                    #fig.suptitle(''.join(['Distribution of Trials: Latency (ms) vs. Fraction of Samples, ','(N = ', str(mobileTimings.size), ")"]) )
+                    #output_dir = "distribGraphs"
+                    # fig.text(0.5, 0.01, '', ha='center')
+                    # fig.text(0.01, 0.5, 'Number of samples', va='center', rotation='vertical')
+                    #title = ''.join([object_detector.PARTITION_NAME, 'Distribution.png'])
+                    
+                    #plt.savefig("/".join([output_dir,title]), dpi=300)
+
+
+                            
                 elif reqType == RequestType.GOODBYE:
                     print(">>disconnect request recv'd")
                     results = generateResponse(RequestType.GOODBYE)
                     socket.sendto(results, (self.client_address[0], controlPort))
+                    
+                    # print("Removing client at " + str(s.getpeername()
+                    #                                 [0]) + ':' + str(s.getpeername()[1]))
+                    # if s in self.inputs:
+                    #     self.inputs.remove(s)
+                    #     print("removed from inputs")
+                    # if s in self.outputs:
+                    #     self.outputs.remove(s)
+                    #     print("removed from outputs")
+                    
+                    # for k in self.message_queues.keys():
+                    #     print(k)
+                    #     print(type(k))
+                    
+                    # del self.message_queues[s.getpeername()[0]]
                 else:
                     print("uhoh")
 
