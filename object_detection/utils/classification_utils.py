@@ -15,7 +15,7 @@ class Frame:
     detected_objects = []
     confidences = []
 
-    def __init__(self, imageData, mobileProcDeltaTime, transmitStartTime, endToEndStartTime):
+    def __init__(self, imageData, mobileProcDeltaTime, transmitStartTime, endToEndStartTime, start):
         self.imageData = imageData
         self.mobileProcDeltaTime = mobileProcDeltaTime
         self.transmitStartTime = transmitStartTime

@@ -20,7 +20,14 @@ from imageio import imread
 
 import object_detector
 import ujson
+from concurrent import futures
+
 from utils.classification_utils import Frame
+
+
+flatten = lambda l: [item for sublist in l for item in sublist]
+flattenDecode = lambda l: [n for sublist in l for n in b64.b64decode(sublist)]
+
 
 class RequestType(Enum):
     HELLO = 'OK'
@@ -128,6 +135,7 @@ DTYPE = "JACKSON"
 
 ServerAddress = ('', controlPort)
 
+
 # Subclass the DatagramRequestHandler
 class ControlMixin(object):
     def __init__(self, handler, poll_interval):
@@ -156,9 +164,6 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
         #self.plot = plot
         #self.fig = fig
         # print("server init called")
-        self.timeout = 0.1
-        ThreadingUDPServer.timeout = 0.1
-
     
         
 
@@ -170,20 +175,19 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                 self.inputShape = server.inputShape
                 #self.plot = server.plot
                 #self.fig = server.fig
-
                 DatagramRequestHandler.__init__(self, request, client_address, server)
 
             def handle(self):
                 global dataList
+                global numPictures
                 global numRECV
                 global numSlices
                 global inputShape
                 global mobileProcTime 
                 global transmitStartTime
                 global endToEndStartTime
+                global start
 
-                flatten = lambda l: [item for sublist in l for item in sublist]
-                flattenDecode = lambda l: [n for sublist in l for n in b64.b64decode(sublist)]
 
                 data = self.request[0].strip()
                 socket = self.request[1]
@@ -196,86 +200,48 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                     # Add output channel for response
                     resp = generateResponse(reqType)
                     print(self.client_address[0])
-                    #print(resp)
                     socket.sendto(resp, (self.client_address[0],controlPort))
 
-
                 elif reqType == RequestType.SETUP:
+                    print(msgParts)
                     print("SETUP Recv'd")
                     resp = generateResponse(reqType)
                     socket.sendto(resp, (self.client_address[0],controlPort))
                     isClientReady = True
+                    numPictures = bytearray(msgParts['Payload'])
+
 
                 elif reqType == RequestType.DATA_HEADER:
-                    numRECV = 0
                     print("DATA_HEADER Recv'd")
+                    numRECV = 0
                     numSlices = msgParts['NumSlices']
                     dataList = [None] * numSlices
                     mobileProcTime = msgParts['MobileDelta']
                     transmitStartTime = msgParts['TransmitStart']
                     endToEndStartTime = msgParts['TotalStart']
-                    print(msgParts)
+                    start = time.time()
 
                 elif reqType == RequestType.DATA:
-                    numRECV = numRECV + 1;
-                    if numRECV < numSlices:
-                        print("how many left: " + str(numSlices - numRECV))
-                        # print("index: " + str(msgParts["Index"]))
-                        # print("numRECV: " + str(numRECV))                        
-                        # print("numSlices: " + str(numSlices))                        
-                        dataList[msgParts["Index"]] = msgParts["Payload"]
+                    dataList[msgParts["Index"]] = msgParts["Payload"]
+                    numRECV = numRECV + 1
+                    if (None not in dataList):
+                        result = preProcessData(dataList,self.inputShape,start)
+                        input_queue.put(result)
+                        results = generateResultMsg(self.output_queue.get())
+                        socket.sendto(results, (self.client_address[0], controlPort))
                     else:
-                        print("done recving")
-                        dataList[msgParts["Index"]] = msgParts["Payload"]
-                        if (object_detector.PARTITION_NAME == "Placeholder"):
-                            try:
-                                print("interpreting as image")
-                                jpegBytes = bytearray(flattenDecode(dataList))
-                                start = time.time() * 1000
-                                img2 = cv2.imdecode(np.frombuffer(jpegBytes, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
-                                img2 = img2.reshape((1, 227, 227, 3))
-                                frame = Frame(img2,mobileProcTime,transmitStartTime,endToEndStartTime)
-                                self.input_queue.put(frame)
-                                # print("put")
-                                results = generateResultMsg(self.output_queue.get())
-                                socket.sendto(results, (self.client_address[0], controlPort))
-                            except TypeError:
-                                print('<<-----------------ERROR----------------->>')
-                                results = generateErrorMsg()
-                                socket.sendto(results, (self.client_address[0], controlPort))
-                                
-                        else:
-                            if DTYPE == "GSON":
-                                tfbytes = b64.decodebytes(bytearray(flatten(dataList)))
-                            else:
-                                print("This is JACKSON")
-                                try:
-                                    tfbytes = bytearray(flattenDecode(dataList))
-                                    tfarr = np.frombuffer(tfbytes, dtype=np.float32)
-                                    tfarr = tfarr.reshape(self.inputShape)
-                                    frame = Frame(tfarr,mobileProcTime,transmitStartTime,endToEndStartTime)
-                                    self.input_queue.put(frame)
-                                    results = generateResultMsg(self.output_queue.get())
-                                    socket.sendto(results, (self.client_address[0], controlPort))
+                        print(dataList)
+                    
 
-                                except TypeError:
-                                    print('<<-----------------ERROR----------------->>')
-                                    results = generateErrorMsg()
-                                    socket.sendto(results, (self.client_address[0], controlPort))
-            
                 elif reqType == RequestType.RESULTS:
                     output_dir = "distribGraphs"
                     print("Results recv'd")
-                    # print(msgParts)
-                    mobileTimings = reject_outliers(np.array(msgParts['MobileTimes']))
-                    transmitTimings = reject_outliers(np.array(msgParts['TransmitTimes']))
-                    serverTimings = reject_outliers(np.array(msgParts['ServerTimes']))
-                    end2EndTimings = reject_outliers(np.array(msgParts['TotalTimes']))
+                    
 
-                    with open('/'.join([output_dir, "raw_data.txt"]), "a") as f:
-                        line = ",\t".join([object_detector.PARTITION_NAME, str(np.mean(mobileTimings)), str(np.var(mobileTimings)), str(np.mean(transmitTimings)), str(np.var(transmitTimings)), str(np.mean(serverTimings)), str(np.var(serverTimings)), str(np.mean(end2EndTimings)), str(np.var(end2EndTimings))])
-                        f.write(line)
-                        f.write("\n")
+                    # with open('/'.join([output_dir, "raw_data.txt"]), "a") as f:
+                    #     line = ",\t".join([object_detector.PARTITION_NAME, str(mobileTimings), str(mobileTimings), str(np.mean(transmitTimings)), str(np.var(transmitTimings)), str(np.mean(serverTimings)), str(np.var(serverTimings)), str(np.mean(end2EndTimings)), str(np.var(end2EndTimings))])
+                    #     f.write(line)
+                    #     f.write("\n")
                     
 
                 elif reqType == RequestType.GOODBYE:
@@ -298,6 +264,50 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
         else:
             print("oops")
 
+def process(dataList, someInputShape,start):
+    with futures.ProcessPoolExecutor(2) as e: 
+        futs = []
+        futs.append(e.submit(preProcessData,dataList,someInputShape,start))
+        res = [fut.result() for fut in futs]
+        return res[0]
+
+def preProcessData(dataList,someInputShape,start):
+    if (object_detector.PARTITION_NAME == "Placeholder"):
+        try:
+            # print("interpreting as image")
+            jpegBytes = bytearray(flattenDecode(dataList))
+            start = time.time() * 1000
+            img2 = cv2.imdecode(np.frombuffer(jpegBytes, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
+            img2 = img2.reshape((1, 227, 227, 3))
+            frame = Frame(img2,mobileProcTime,transmitStartTime,endToEndStartTime,start)
+            return frame
+        except TypeError:
+            print("TypeError Raised")
+
+        # print("put")
+        # results = generateResultMsg(self.output_queue.get())
+        # socket.sendto(results, (self.client_address[0], controlPort))
+            
+    else:
+        if DTYPE == "GSON":
+            tfbytes = b64.decodebytes(bytearray(flatten(dataList)))
+        else:
+            # print("This is JACKSON")
+            try:
+                tfbytes = bytearray(flattenDecode(dataList))
+                tfarr = np.frombuffer(tfbytes, dtype=np.float32)
+                tfarr = tfarr.reshape(someInputShape)
+                frame = Frame(tfarr,mobileProcTime,transmitStartTime,endToEndStartTime,start)
+                return frame
+            
+            except TypeError:
+                print("TypeError Raised")
+
+            # self.input_queue.put(frame)
+            # results = generateResultMsg(self.output_queue.get())
+            # socket.sendto(results, (self.client_address[0], controlPort))
+
+
 def main():
     input_q = Queue(maxsize=1)
     output_q = Queue(maxsize=1)
@@ -306,12 +316,11 @@ def main():
     #fig, ax = plt.subplots(nrows=2,ncols=2,constrained_layout=True)
 
     udpserver = EasyUDPServer(input_q, output_q, ServerAddress, 0.01)
+    
     udpserver.start()
     udpserver.setPartitionPt(object_detector.PARTITION_NAME, object_detector.partitions_dict)
     
     pool = Pool(1, object_detector.worker, (input_q, output_q))
-
     udpserver.serve_forever()
 if __name__ == '__main__':   
     main()
-    
