@@ -8,87 +8,24 @@ import queue
 import sys
 import threading
 import time
-from enum import Enum
-from multiprocessing import Pool, Queue
+from multiprocessing import Queue, Pool,Process
 from socketserver import DatagramRequestHandler, ThreadingUDPServer
-from sys import getsizeof
 import zlib
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 from imageio import imread
 
+from object_detector import PARTITION_NAME
+
+
 import object_detector
 import ujson
-from concurrent import futures
 
 from utils.classification_utils import Frame
+from utils.network_utils import RequestType, generateErrorMsg, generateResponse, generateResultMsg
 
-
-flatten = lambda l: [item for sublist in l for item in sublist]
-flattenDecode = lambda l: [n for sublist in l for n in b64.b64decode(sublist)]
-
-
-class RequestType(Enum):
-    HELLO = 'OK'
-    SETUP = 'SETUP'
-    READY_ACK = 'READY_ACK'
-    PLAY = 'ACK'
-    DATA_HEADER = 'DATA_HEADER_RECV'
-    DATA = 'DATA_RECV'
-    RESULTS = 6
-    GOODBYE = 'GOODBYE'
-
-def generateResponse(requestType):
-        # print('TESTING: ' + requestType.value)
-        body = {}
-        body_str = ""
-        content_len = 0
-
-        if (requestType == RequestType.SETUP):  #TODO: Add partition logic
-            
-            body.update({'Partition-Point': object_detector.PARTITION_NAME})
-            body.update({'UDP-Ports': [9998,9999]})
-            
-            # print(body)
-            body_str = ujson.dumps(body)
-            # print(body_str)
-            content_len = getsizeof(body_str.encode())
-
-        elif (requestType == RequestType.GOODBYE):
-            body_str = ""
-            content_len = getsizeof(body_str.encode())
-
-            
-        response = requestType.value + '\r\n' + \
-                    'CSeq: ' + str(0) + '\r\n' + \
-                    'Content-Length: ' + str(content_len) + '\r\n' + \
-                    body_str + '\r\n\r\n'
-        return response.encode()
-
-def generateErrorMsg():
-    # frame.stopServerProcTimer()
-    # print('TESTING: ' + requestType.value)
-    body = {}
-    body_str = ""
-    content_len = 0
-
-    #Add metadata
-    body.update({'mobileProcDeltaTime': -1})
-    body.update({'serverProcDeltaTime': -1})
-    body.update({'transmitStartTime': -1})
-    body.update({'endToEndStartTime': -1})
-
-
-    # #Add Classifications
-    # body.update({'detected_objects': frame.detected_objects})
-    # body.update({'confidences': frame.confidences})
-
-    return ('DATA' + '\r\n' + \
-                'CSeq: ' + str(0) + '\r\n' + \
-                'Content-Length: ' + str(getsizeof(body_str.encode())) + '\r\n' + \
-                ujson.dumps(body) + '\r\n\r\n').encode()
-    # return response.encode()
+from preprocessor import PreprocessorWorker
 
 def reject_outliers(data, m=2):
     return data[abs(data - np.mean(data)) < m * np.std(data)]
@@ -98,29 +35,6 @@ def count_unique(keys):
     bins = uniq_keys.searchsorted(keys)
     return uniq_keys, np.bincount(bins)
 
-def generateResultMsg(frame):
-    frame.stopServerProcTimer()
-    # print('TESTING: ' + requestType.value)
-    body = {}
-    body_str = ""
-    content_len = 0
-
-    #Add metadata
-    body.update({'mobileProcDeltaTime': frame.mobileProcDeltaTime})
-    body.update({'serverProcDeltaTime': frame.serverProcDeltaTime})
-    body.update({'transmitStartTime': frame.transmitStartTime})
-    body.update({'endToEndStartTime': frame.endToEndStartTime})
-
-
-    #Add Classifications
-    body.update({'detected_objects': frame.detected_objects})
-    body.update({'confidences': frame.confidences})
-
-    return ('DATA' + '\r\n' + \
-                'CSeq: ' + str(0) + '\r\n' + \
-                'Content-Length: ' + str(getsizeof(body_str.encode())) + '\r\n' + \
-                ujson.dumps(body) + '\r\n\r\n').encode()
-    # return response.encode()
 
 controlPort = 9998 
 
@@ -134,6 +48,25 @@ endToEndStartTime = 0
 DTYPE = "JACKSON"
 
 ServerAddress = ('', controlPort)
+
+def postProcess(socket, address, port, output_queue, numPictures):
+    print("postProcessor Started")
+    print(numPictures)
+
+    while True:
+        results = []
+        for x in range(numPictures):
+            # print(x)
+            results.append(output_queue.get())
+            # print("hello")
+        stopTime = time.time()
+
+        # print('test')
+        for frame in results:
+            frame.stopServerProcTimer(stopTime)
+            socket.sendto(generateResultMsg(frame),(address, port))
+            print('sent')
+        print("done sending results")
 
 
 # Subclass the DatagramRequestHandler
@@ -178,17 +111,6 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                 DatagramRequestHandler.__init__(self, request, client_address, server)
 
             def handle(self):
-                global dataList
-                global numPictures
-                global numRECV
-                global numSlices
-                global inputShape
-                global mobileProcTime 
-                global transmitStartTime
-                global endToEndStartTime
-                global start
-
-
                 data = self.request[0].strip()
                 socket = self.request[1]
                 msgParts = ujson.loads(data)
@@ -197,62 +119,35 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
                 
                 if reqType == RequestType.HELLO:
                     print("HELLO Recv'd")
-                    # Add output channel for response
-                    resp = generateResponse(reqType)
+                    resp = generateResponse(reqType, PARTITION_NAME)
                     print(self.client_address[0])
                     socket.sendto(resp, (self.client_address[0],controlPort))
 
                 elif reqType == RequestType.SETUP:
-                    print(msgParts)
                     print("SETUP Recv'd")
-                    resp = generateResponse(reqType)
-                    socket.sendto(resp, (self.client_address[0],controlPort))
-                    isClientReady = True
-                    numPictures = bytearray(msgParts['Payload'])
-
+                    input_queue.put(msgParts)
+                    resp = generateResponse(reqType, PARTITION_NAME)
+                    socket.sendto(resp, (self.client_address[0], controlPort)) #Respond to setup request
+                    postProcessor = Process(target=postProcess, args = (socket,self.client_address[0], controlPort,output_queue, int(bytearray(msgParts['Payload'])))) 
+                    postProcessor.start()
+                    
 
                 elif reqType == RequestType.DATA_HEADER:
-                    print("DATA_HEADER Recv'd")
-                    numRECV = 0
-                    numSlices = msgParts['NumSlices']
-                    dataList = [None] * numSlices
-                    mobileProcTime = msgParts['MobileDelta']
-                    transmitStartTime = msgParts['TransmitStart']
-                    endToEndStartTime = msgParts['TotalStart']
-                    start = time.time()
-
+                    numPictures = msgParts['NumPictures']
+                    input_queue.put(msgParts)
+                    
+                    
                 elif reqType == RequestType.DATA:
-                    dataList[msgParts["Index"]] = msgParts["Payload"]
-                    numRECV = numRECV + 1
-                    if (None not in dataList):
-                        result = preProcessData(dataList,self.inputShape,start)
-                        input_queue.put(result)
-                        results = generateResultMsg(self.output_queue.get())
-                        socket.sendto(results, (self.client_address[0], controlPort))
-                    else:
-                        print(dataList)
-                    
+                    input_queue.put(msgParts)
 
-                elif reqType == RequestType.RESULTS:
-                    output_dir = "distribGraphs"
-                    print("Results recv'd")
-                    
-
-                    # with open('/'.join([output_dir, "raw_data.txt"]), "a") as f:
-                    #     line = ",\t".join([object_detector.PARTITION_NAME, str(mobileTimings), str(mobileTimings), str(np.mean(transmitTimings)), str(np.var(transmitTimings)), str(np.mean(serverTimings)), str(np.var(serverTimings)), str(np.mean(end2EndTimings)), str(np.var(end2EndTimings))])
-                    #     f.write(line)
-                    #     f.write("\n")
                     
 
                 elif reqType == RequestType.GOODBYE:
                     print(">>disconnect request recv'd")
-                    results = generateResponse(RequestType.GOODBYE)
+                    results = generateResponse(reqType, PARTITION_NAME)
                     socket.sendto(results, (self.client_address[0], controlPort))
                 else:
                     print("uhoh")
-
-            def finish(self):
-                pass
 
         ThreadingUDPServer.__init__(self, addr, MyUDPRequestHandler, bind_and_activate)
         ControlMixin.__init__(self, handler, poll_interval) 
@@ -264,63 +159,35 @@ class EasyUDPServer(ControlMixin, ThreadingUDPServer):
         else:
             print("oops")
 
-def process(dataList, someInputShape,start):
-    with futures.ProcessPoolExecutor(2) as e: 
-        futs = []
-        futs.append(e.submit(preProcessData,dataList,someInputShape,start))
-        res = [fut.result() for fut in futs]
-        return res[0]
-
-def preProcessData(dataList,someInputShape,start):
-    if (object_detector.PARTITION_NAME == "Placeholder"):
-        try:
-            # print("interpreting as image")
-            jpegBytes = bytearray(flattenDecode(dataList))
-            start = time.time() * 1000
-            img2 = cv2.imdecode(np.frombuffer(jpegBytes, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
-            img2 = img2.reshape((1, 227, 227, 3))
-            frame = Frame(img2,mobileProcTime,transmitStartTime,endToEndStartTime,start)
-            return frame
-        except TypeError:
-            print("TypeError Raised")
-
-        # print("put")
-        # results = generateResultMsg(self.output_queue.get())
-        # socket.sendto(results, (self.client_address[0], controlPort))
-            
-    else:
-        if DTYPE == "GSON":
-            tfbytes = b64.decodebytes(bytearray(flatten(dataList)))
-        else:
-            # print("This is JACKSON")
-            try:
-                tfbytes = bytearray(flattenDecode(dataList))
-                tfarr = np.frombuffer(tfbytes, dtype=np.float32)
-                tfarr = tfarr.reshape(someInputShape)
-                frame = Frame(tfarr,mobileProcTime,transmitStartTime,endToEndStartTime,start)
-                return frame
-            
-            except TypeError:
-                print("TypeError Raised")
-
-            # self.input_queue.put(frame)
-            # results = generateResultMsg(self.output_queue.get())
-            # socket.sendto(results, (self.client_address[0], controlPort))
-
-
 def main():
-    input_q = Queue(maxsize=1)
-    output_q = Queue(maxsize=1)
+    #Setup the queues for the process communication between the Network Handler, Preprocessor, and Classifier
+    preprocessor_input_q = Queue()
+    preprocessor_output_q = Queue()
+    classifier_output_q = Queue()
+
+    
     object_detector.readPartitionData()
 
-    #fig, ax = plt.subplots(nrows=2,ncols=2,constrained_layout=True)
 
-    udpserver = EasyUDPServer(input_q, output_q, ServerAddress, 0.01)
-    
+    udpserver = EasyUDPServer(preprocessor_input_q, classifier_output_q, ServerAddress, 0.01)
     udpserver.start()
-    udpserver.setPartitionPt(object_detector.PARTITION_NAME, object_detector.partitions_dict)
-    
-    pool = Pool(1, object_detector.worker, (input_q, output_q))
-    udpserver.serve_forever()
+    udpserver.setPartitionPt(PARTITION_NAME, object_detector.partitions_dict)
+
+
+
+    try:
+
+        preprocessor_pool = Pool(1,PreprocessorWorker,(preprocessor_input_q,preprocessor_output_q, udpserver.inputShape))
+        classifier_pool = Pool(1, object_detector.worker, (preprocessor_output_q, classifier_output_q))
+
+
+        udpserver.serve_forever()
+    except KeyboardInterrupt:
+        preprocessor_pool.terminate()
+        classifier_pool.terminate()
+        
+        preprocessor_pool.join()
+        classifier_pool.join()
+        print("exiting")
 if __name__ == '__main__':   
     main()

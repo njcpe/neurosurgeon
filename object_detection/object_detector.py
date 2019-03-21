@@ -16,7 +16,6 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 
 from utils.caffe_classes import class_names
-from utils.network_utils import NSCPServer
 from tensorflow.python.client import timeline
 
 #TODO: Make this a spaghetti code class-based

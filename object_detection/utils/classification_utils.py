@@ -15,11 +15,11 @@ class Frame:
     detected_objects = []
     confidences = []
 
-    def __init__(self, imageData, mobileProcDeltaTime, transmitStartTime, endToEndStartTime, start):
+    def __init__(self, imageData, mobileProcDeltaTime, transmitStartTime, endToEndStartTime, syncStartTime):
         self.imageData = imageData
         self.mobileProcDeltaTime = mobileProcDeltaTime
         self.transmitStartTime = transmitStartTime
-        self.serverProcStartTime = time.time()
+        self.serverProcStartTime = syncStartTime
         self.endToEndStartTime = endToEndStartTime
     
     def deleteRawImgData(self):
@@ -28,6 +28,6 @@ class Frame:
     def getImageData(self):
         return self.imageData
 
-    def stopServerProcTimer(self):
-        self.serverProcDeltaTime = (time.time() - self.serverProcStartTime)*1000
-        print("server proc timer stopped, tServer = " + str(self.serverProcDeltaTime) + " ms")
+    def stopServerProcTimer(self,syncEndTime):
+        self.serverProcDeltaTime = (syncEndTime - self.serverProcStartTime)*1000*1000000 #convert server proc time from seconds to milliseconds to nanoseconds 
+        print("server proc timer stopped, tServer = " + str(self.serverProcDeltaTime) + " ns")
