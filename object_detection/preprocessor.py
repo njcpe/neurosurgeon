@@ -74,7 +74,7 @@ def PreprocessorWorker(input_q, output_q, inputShape):
 
         # if the message is a data fragment...
         if reqType == RequestType.DATA:
-            # print("DATA Recv'd")
+            print("DATA Recv'd")
 
             # print(msgParts["PicIdx"])
             # print(msgParts["SliceIdx"])

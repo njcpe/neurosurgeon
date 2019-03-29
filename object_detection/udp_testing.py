@@ -1,5 +1,4 @@
 # Sample UDP Server - Multi threaded
-import zstandard as zstd
 import base64 as b64
 import csv
 import io
@@ -8,24 +7,24 @@ import queue
 import sys
 import threading
 import time
-from multiprocessing import Queue, Pool,Process
-from socketserver import DatagramRequestHandler, ThreadingUDPServer
 import zlib
+from multiprocessing import Pool, Process, Queue
+from socketserver import DatagramRequestHandler, ThreadingUDPServer
+
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import zstandard as zstd
 from imageio import imread
-
-from object_detector import PARTITION_NAME
-
 
 import object_detector
 import ujson
-
-from utils.classification_utils import Frame
-from utils.network_utils import RequestType, generateErrorMsg, generateResponse, generateResultMsg
-
+from object_detector import PARTITION_NAME
 from preprocessor import PreprocessorWorker
+from utils.classification_utils import Frame
+from utils.network_utils import (RequestType, generateErrorMsg,
+                                 generateResponse, generateResultMsg)
+
 
 def reject_outliers(data, m=2):
     return data[abs(data - np.mean(data)) < m * np.std(data)]
