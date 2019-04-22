@@ -57,3 +57,13 @@ object_detection/dataList.txt
 object_detection/dataList.csv
 object_detection/object_detector.py~
 object_detection/reconstructed.jpg
+__pycache__/imageSocketTester.cpython-36.pyc
+__pycache__/__init__.cpython-35.pyc
+__pycache__/__init__.cpython-36.pyc
+__pycache__/it.cpython-36.pyc
+__pycache__/object_detector.cpython-36.pyc
+__pycache__/postprocessor.cpython-36.pyc
+__pycache__/preprocessor.cpython-36.pyc
+__pycache__/test.cpython-36.pyc
+__pycache__/udp_testing.cpython-36.pyc
+__pycache__
