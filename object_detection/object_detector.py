@@ -36,7 +36,7 @@ config.gpu_options.allow_growth = True
 MODEL_NAME = 'alexnet'
 MODEL_DIR = 'frozen_models'
 
-PARTITION_NAME = 'Placeholder'
+PARTITION_NAME = 'pool1'
 
 OUTPUT_NAME = 'Softmax'
 
